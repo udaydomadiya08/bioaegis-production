@@ -4,10 +4,8 @@ data/literature_survey.csv
 *.csv
 *.pth
 *.pkl
+data/shards/
 
-# Explicitly Allow Shards
-!data/shards/
-!data/shards/*.pt.gz
 
 # Models directory (Synchronized to Hugging Face core)
 models/ultimate_bioaegis_ensemble.pth
