@@ -14,7 +14,8 @@ import {
   ChevronRight,
   Info,
   Cpu,
-  Box
+  Box,
+  Activity
 } from "lucide-react";
 import MoleculeViewer from "@/components/MoleculeViewer";
 import Molecule3D from "@/components/Molecule3D";
