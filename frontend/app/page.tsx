@@ -13,7 +13,8 @@ import {
   Cpu, 
   ChevronRight,
   Database,
-  Globe
+  Globe,
+  Radio
 } from "lucide-react";
 import MoleculeViewer from "@/components/MoleculeViewer";
 import Molecule3D from "@/components/Molecule3D";
@@ -81,153 +82,236 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen p-4 md:p-8 flex flex-col gap-6 bg-[#020617] text-slate-100 italic selection:bg-emerald-500/30">
-      {/* Premium Header */}
-      <header className="flex items-center justify-between bg-black/20 border border-white/5 px-8 py-4 rounded-2xl backdrop-blur-xl">
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30">
-              <ShieldAlert className="text-emerald-400 w-6 h-6" />
-            </div>
-            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-950 animate-pulse" />
-          </div>
+    <main className="min-h-screen relative flex flex-col p-6 md:p-12 gap-12 overflow-hidden">
+      {/* Liquid Background Orbs */}
+      <div className="bg-liquid fixed inset-0">
+        <motion.div 
+          animate={{ x: [0, 50, 0], y: [0, -30, 0] }}
+          transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+          className="absolute top-[10%] left-[10%] w-[600px] h-[600px] bg-violet-600/10 rounded-full blur-[120px]" 
+        />
+        <motion.div 
+          animate={{ x: [0, -40, 0], y: [0, 60, 0] }}
+          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+          className="absolute bottom-[10%] right-[10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px]" 
+        />
+      </div>
+
+      {/* Floating Header */}
+      <header className="relative z-10 flex items-center justify-between">
+        <div className="flex items-center gap-6">
+          <motion.div 
+             whileHover={{ scale: 1.1, rotate: 5 }}
+             className="w-14 h-14 bg-white/5 backdrop-blur-3xl rounded-3xl flex items-center justify-center border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+          >
+            <ShieldAlert className="text-cyan-400 w-8 h-8 drop-shadow-[0_0_10px_#22d3ee]" />
+          </motion.div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-white uppercase italic">BioAegis X-Alpha</h1>
-            <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-              <Activity className="w-3 h-3 text-emerald-500" /> System Operational | Node 08-Alpha
+            <h1 className="text-3xl font-black tracking-tighter text-white font-display">BIOAEGIS <span className="text-cyan-400">X-ALPHA</span></h1>
+            <div className="flex items-center gap-2 text-[10px] text-white/30 font-black uppercase tracking-[0.4em]">
+               <Radio className="w-3 h-3 text-cyan-400 animate-pulse" /> Operational Core | Node 08
             </div>
           </div>
         </div>
         
-        <nav className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest text-slate-400">
-          <div className="flex items-center gap-2 text-emerald-400">
-            <Database className="w-3 h-3" /> API Core Active
+        <nav className="hidden md:flex items-center gap-10">
+          <div className="flex items-center gap-3 bg-white/5 backdrop-blur-2xl border border-white/5 px-6 py-2.5 rounded-full">
+            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-cyan-400">Live Synthesis Active</span>
           </div>
         </nav>
       </header>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 h-full">
+      {/* Hero Section */}
+      <section className="relative z-10 max-w-5xl mx-auto text-center space-y-8 py-12">
+        <motion.h2 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-mega text-white font-display"
+        >
+          ULTIMATE <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-violet-500 to-fuchsia-400">TOXICITY</span> CONTROL
+        </motion.h2>
+        <p className="text-xl text-white/40 max-w-2xl mx-auto leading-relaxed font-medium">
+          Input molecular descriptors below for high-attraction GNN structural intelligence and real-time sentinel vision.
+        </p>
+      </section>
+
+      {/* Main Grid Architecture */}
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-[1600px] mx-auto w-full">
         
-        {/* Left Column */}
-        <aside className="lg:col-span-3 flex flex-col gap-6">
-          <section className="bg-black/20 border border-white/5 p-6 flex-1 flex flex-col rounded-3xl backdrop-blur-xl">
-            <div className="flex items-center gap-2 mb-6 text-emerald-400">
-              <Terminal className="w-5 h-5" />
-              <h2 className="text-sm font-bold uppercase tracking-widest">Neural Console</h2>
+        {/* Left Column: Neural Console */}
+        <aside className="lg:col-span-4 flex flex-col gap-10">
+          <section className="neon-card p-10 flex flex-col gap-8 neon-border-cyan group">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-cyan-500/10 rounded-xl flex items-center justify-center border border-cyan-500/20">
+                <Terminal className="text-cyan-400 w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-black uppercase tracking-widest text-white/80 font-display">Neural Console</h3>
             </div>
             
-            <div className="space-y-4 flex-1">
-              <textarea 
-                value={smiles}
-                onChange={(e) => setSmiles(e.target.value)}
-                placeholder="Enter chemical string..."
-                className="w-full h-32 bg-black/40 border border-white/10 rounded-xl p-4 resize-none font-mono text-sm focus:border-emerald-500/50 outline-none"
-              />
+            <div className="space-y-6 flex-1">
+              <div className="space-y-4">
+                <label className="text-[11px] uppercase tracking-[0.3em] font-black text-white/30 block">Structural SMILES Descriptor</label>
+                <textarea 
+                  value={smiles}
+                  onChange={(e) => setSmiles(e.target.value)}
+                  placeholder="Enter molecular string (e.g. CC(=O)Oc1ccccc1C(=O)O)..."
+                  className="w-full h-48 bg-white/5 border border-white/10 rounded-[2rem] p-8 font-mono text-sm text-cyan-50 focus:border-cyan-400/50 transition-all outline-none shadow-inner"
+                />
+              </div>
+
               <button 
                 onClick={handleAnalyze}
                 disabled={isAnalyzing}
-                className="w-full bg-emerald-500 hover:bg-emerald-400 text-black py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                className="w-full btn-neon-cyan relative overflow-hidden group/btn"
               >
-                {isAnalyzing ? <Activity className="animate-spin w-5 h-5" /> : <>Analyze Compound <ChevronRight className="w-4 h-4" /></>}
+                <span className="relative z-10 flex items-center justify-center gap-3">
+                   {isAnalyzing ? "SYNTESIZING..." : "EXECUTE ANALYSIS"} <ChevronRight className="w-6 h-6 group-hover/btn:translate-x-2 transition-transform" />
+                </span>
+                <motion.div 
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                  transition={{ duration: 0.6 }}
+                  className="absolute inset-0 bg-white/20 skew-x-12 translate-y-[-50%] top-0 h-[200%]"
+                />
               </button>
 
-              <div className="pt-6 border-t border-white/5 space-y-2">
-                {examples.map((ex) => (
-                  <button 
-                    key={ex.name}
-                    onClick={() => setSmiles(ex.smiles)}
-                    className="w-full flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-emerald-500/30 text-left group"
-                  >
-                    <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400">{ex.name}</span>
-                    <Box className="w-3 h-3 text-slate-600 group-hover:text-emerald-500" />
-                  </button>
-                ))}
+              <div className="flex flex-col gap-3 pt-6 border-t border-white/5">
+                <span className="text-[11px] uppercase tracking-[0.3em] font-black text-white/30 block">Structural Templates</span>
+                <div className="grid grid-cols-2 gap-3">
+                  {examples.map((ex) => (
+                    <button 
+                      key={ex.name}
+                      onClick={() => setSmiles(ex.smiles)}
+                      className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-cyan-400/50 hover:bg-cyan-400/5 transition-all text-left group"
+                    >
+                      <span className="text-xs font-bold text-white/60 group-hover:text-cyan-400">{ex.name}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
+
+          <div className="p-8 rounded-[2rem] bg-indigo-500/5 border border-indigo-500/10 text-xs text-white/40 leading-relaxed italic">
+             <div className="flex items-center gap-3 mb-3 text-indigo-400 not-italic font-black uppercase tracking-widest">
+                <Cpu className="w-4 h-4" /> Inference Specs
+             </div>
+             Model Ver: Alpha-08 <br/>
+             Core Accuracy: 94.25% <br/>
+             Stability: Production Grade
+          </div>
         </aside>
 
-        {/* Center Column */}
-        <div className="lg:col-span-6 flex flex-col gap-6">
-          <section className="bg-black/20 border border-white/5 overflow-hidden flex-1 relative flex flex-col min-h-[500px] rounded-3xl backdrop-blur-xl">
-            <div className="absolute top-6 left-6 z-10 flex gap-2">
-              <button onClick={() => setViewerMode("3D")} className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest ${viewerMode === "3D" ? 'bg-emerald-500 text-slate-950' : 'bg-white/5 text-slate-400'}`}>3D Engine</button>
-              <button onClick={() => setViewerMode("2D")} className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest ${viewerMode === "2D" ? 'bg-emerald-500 text-slate-950' : 'bg-white/5 text-slate-400'}`}>2D Schematic</button>
-            </div>
+        {/* Right Column: Dynamic Visual Intelligence */}
+        <div className="lg:col-span-8 flex flex-col gap-10">
+          <AnimatePresence mode="wait">
+            {!result ? (
+               <motion.section 
+                 key="idle"
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 exit={{ opacity: 0 }}
+                 className="neon-card flex-1 flex flex-col items-center justify-center p-24 text-center border-dashed border-white/10"
+               >
+                 <div className="w-32 h-32 bg-white/5 rounded-[3rem] flex items-center justify-center mb-10 border border-white/10 group animate-pulse">
+                    <Globe className="w-16 h-16 text-white/10" />
+                 </div>
+                 <h2 className="text-title text-white/40 font-display italic tracking-tighter">AWAITING NEURAL ACTIVATION</h2>
+                 <p className="text-lg text-white/20 mt-4 max-w-sm uppercase tracking-tighter font-bold">Input a compound to synthesize structural multi-pane intelligence.</p>
+               </motion.section>
+            ) : (
+               <motion.div 
+                 key="result"
+                 initial={{ opacity: 0, y: 40 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 className="flex flex-col gap-10"
+               >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <section className="neon-card p-10 neon-border-violet h-[650px] flex flex-col">
+                      <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-3">
+                          <Zap className="text-violet-400 w-6 h-6" />
+                          <h3 className="text-lg font-black uppercase tracking-widest text-white/80 font-display">Sentinel Vision</h3>
+                        </div>
+                        <div className="flex gap-2">
+                          <button 
+                            onClick={() => setViewerMode("3D")}
+                            className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${viewerMode === "3D" ? 'bg-violet-500 text-white' : 'bg-white/5 text-white/40 border border-white/5'}`}
+                          >
+                            3D Core
+                          </button>
+                        </div>
+                      </div>
 
-            <AnimatePresence mode="wait">
-              {result ? (
-                <motion.div key={viewerMode} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 flex flex-col h-full">
-                  <div className="flex-1 flex items-center justify-center p-8">
-                    {viewerMode === "2D" ? (
-                      <div className="w-full max-w-lg bg-black/40 border border-white/5 p-6 rounded-2xl backdrop-blur-xl">
-                        <MoleculeViewer svg={result.svg || ""} />
+                      <div className="flex-1 relative bg-black/40 rounded-[2.5rem] border border-white/5 shadow-inner overflow-hidden mb-8">
+                         {viewerMode === "3D" ? (
+                            <Molecule3D pdb={result.pdb || ""} atomScores={sentinelVision ? result.toxicity?.atom_scores : undefined} />
+                         ) : (
+                            <div className="w-full h-full flex items-center justify-center p-12 invert brightness-[2] contrast-[1.5]">
+                               <MoleculeViewer svg={result.svg || ""} />
+                            </div>
+                         )}
                       </div>
-                    ) : (
-                      <div className="w-full h-full relative">
-                        <Molecule3D pdb={result.pdb || ""} atomScores={sentinelVision ? result.toxicity?.atom_scores : undefined} />
-                      </div>
-                    )}
+
+                      <button 
+                        onClick={() => setSentinelVision(!sentinelVision)}
+                        className={`w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] transition-all border ${sentinelVision ? 'bg-violet-500/20 text-violet-400 border-violet-500/50' : 'bg-white/5 text-white/20 border-white/5'}`}
+                      >
+                         SENTINEL SENSOR: {sentinelVision ? 'ONLINE' : 'OFFLINE'}
+                      </button>
+                    </section>
+
+                    <section className="neon-card p-10 flex flex-col gap-10 border-cyan-400/20 bg-cyan-400/[0.02]">
+                       <div className="flex items-center gap-3">
+                          <Layers className="text-cyan-400 w-6 h-6" />
+                          <h3 className="text-lg font-black uppercase tracking-widest text-white/80 font-display">Inference Engine</h3>
+                       </div>
+
+                       <div className="flex flex-col items-center justify-center -mt-8">
+                          <ToxicityGauge percent={result.toxicity?.toxicity_percent || 0} />
+                       </div>
+
+                       <div className="space-y-6">
+                         <div className="p-8 rounded-[2rem] bg-white/5 border border-white/10">
+                            <span className="text-[11px] font-black uppercase tracking-[0.4em] text-white/30 block mb-2">Dominant Cluster Match</span>
+                            <div className="text-4xl font-black text-cyan-400 capitalize tracking-tighter italic">
+                               {result.toxicity?.toxicity_class}
+                            </div>
+                         </div>
+
+                         <div className="grid grid-cols-2 gap-4">
+                            {[
+                               { l: "LogP", v: result.properties?.logp.toFixed(2) },
+                               { l: "TPSA", v: result.properties?.tpsa.toFixed(1) },
+                               { l: "Mol Wt", v: result.properties?.mol_wt.toFixed(1) },
+                               { l: "H-Donors", v: result.properties?.h_donors }
+                            ].map((p, i) => (
+                               <div key={i} className="p-5 rounded-2xl bg-black/40 border border-white/5">
+                                  <div className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30 mb-1">{p.l}</div>
+                                  <div className="text-xl font-black text-white">{p.v}</div>
+                               </div>
+                            ))}
+                         </div>
+
+                         <div className="p-6 rounded-2xl bg-violet-600/10 border border-violet-500/20 text-[11px] text-white/60 leading-relaxed font-medium italic">
+                            <Info className="w-5 h-5 text-violet-400 mb-2" />
+                            AI Insight: Structural analysis of {result.smiles.slice(0, 15)}... indicates {(result.toxicity?.toxicity_percent || 0) > 70 ? 'CRITICAL' : (result.toxicity?.toxicity_percent || 0) > 30 ? 'ELEVATED' : 'STABLE'} risk parameters within the {result.toxicity?.toxicity_class} network.
+                         </div>
+                       </div>
+                    </section>
                   </div>
-                  <div className="p-4 border-t border-white/5 flex items-center justify-between bg-slate-950/20">
-                    <button onClick={() => setSentinelVision(!sentinelVision)} className={`px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${sentinelVision ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-slate-800 text-slate-500'}`}>Sentinel Vision: {sentinelVision ? 'Active' : 'Offline'}</button>
-                  </div>
-                </motion.div>
-              ) : (
-                <div className="flex-1 flex flex-col items-center justify-center opacity-40">
-                  <Globe className="w-12 h-12 text-slate-600 mb-4 animate-pulse" />
-                  <h3 className="text-xl font-bold uppercase italic tracking-tighter">Awaiting Signal</h3>
-                </div>
-              )}
-            </AnimatePresence>
-          </section>
+               </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-
-        {/* Right Column */}
-        <aside className="lg:col-span-3 flex flex-col gap-6">
-          <section className="bg-black/20 border border-white/5 p-6 flex-1 flex flex-col rounded-3xl backdrop-blur-xl">
-            <div className="flex items-center gap-2 mb-6 text-emerald-400">
-              <Layers className="w-5 h-5" />
-              <h2 className="text-sm font-bold uppercase tracking-widest">Intelligence Report</h2>
-            </div>
-            <AnimatePresence>
-              {result && result.toxicity ? (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-                  <div className="flex justify-center -mt-4"><ToxicityGauge percent={result.toxicity.toxicity_percent} /></div>
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-1">Dominant Syndrome</div>
-                    <div className="text-xl font-bold text-emerald-400 capitalize italic">{result.toxicity.toxicity_class}</div>
-                  </div>
-                  <div className="space-y-4">
-                     <span className="text-[10px] uppercase tracking-widest font-bold text-slate-500">Neural Path Activation</span>
-                     <div className="space-y-3">
-                        {result.toxicity.top_classes?.slice(0, 3).map((cls, j) => (
-                           <div key={j} className="space-y-1.5">
-                              <div className="flex justify-between text-[10px] font-bold uppercase">
-                                 <span className="text-slate-400">{cls.class}</span>
-                                 <span className="text-slate-200">{(cls.confidence * 100).toFixed(1)}%</span>
-                              </div>
-                              <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                                 <motion.div initial={{ width: 0 }} animate={{ width: `${cls.confidence * 100}%` }} className={`h-full ${j === 0 ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-slate-600 opacity-60'}`} />
-                              </div>
-                           </div>
-                        ))}
-                     </div>
-                  </div>
-                </motion.div>
-              ) : (
-                <div className="flex-1 flex flex-col items-center justify-center text-slate-600 italic text-[10px] uppercase tracking-widest">Awaiting Neural Inference</div>
-              )}
-            </AnimatePresence>
-          </section>
-        </aside>
       </div>
       
-      <footer className="footer bg-neutral-950 text-[10px] font-bold text-neutral-700 uppercase tracking-[0.3em] py-8 border-t border-white/5 px-6 flex justify-between">
-        <div>© 2026 BioAegis X-Alpha Platform | Secure Neural Bridge</div>
-        <div className="flex gap-8">
-          <span>Node: Operational</span>
+      {/* Heavy Branding Footer */}
+      <footer className="relative z-10 pt-12 pb-24 border-t border-white/5 flex items-center justify-between text-[11px] font-black uppercase tracking-[0.5em] text-white/20 px-4">
+        <div>© 2026 BIOAEGIS X-ALPHA SYSTEM | SECURE NEURAL ARCHITECTURE</div>
+        <div className="flex gap-10">
+          <span className="text-cyan-400/40">Status: Operational</span>
           <span>Cluster: 08-Alpha</span>
         </div>
       </footer>
