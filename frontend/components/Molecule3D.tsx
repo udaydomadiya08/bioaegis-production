@@ -137,7 +137,7 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
   };
 
   return (
-    <div className="relative glass-card min-h-[400px] w-full group overflow-hidden bg-black/40">
+    <div className="relative glass-card min-h-[500px] w-full group overflow-hidden bg-black/40">
       {!pdb || isAnalyzing ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4">
           <Loader2 className="w-12 h-12 text-primary animate-spin" />
@@ -146,10 +146,10 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
           </p>
         </div>
       ) : null}
-
+ 
       <div 
         ref={containerRef} 
-        className={`w-full h-[400px] transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} 
+        className={`w-full h-[500px] transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} 
       />
 
       <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
