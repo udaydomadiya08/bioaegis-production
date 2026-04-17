@@ -18,6 +18,7 @@ body {
   color: #c9d1d9;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+  font-size: 18px; /* Increased base size */
 }
 
 h1, h2, h3, .font-bold {
@@ -26,94 +27,102 @@ h1, h2, h3, .font-bold {
 }
 
 @layer components {
-  /* Vantix Style Command Cards */
+  /* Vantix Style Command Cards - Rebuilt with Strict CSS */
   .command-card {
     background: rgba(22, 27, 34, 0.4);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.05); /* Thicker borders */
+    border-radius: 2rem;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
   }
 
   .command-card:hover {
-    border-color: rgba(0, 245, 160, 0.2);
+    border-color: rgba(0, 245, 160, 0.3);
     background: rgba(22, 27, 34, 0.6);
+    transform: translateY(-4px);
   }
 
-  /* Industrial Glow Buttons */
+  /* Massive Action Button */
   .btn-vantix {
     background: var(--emerald-pure);
-    color: #0b0e14;
-    padding: 0.75rem 2rem;
-    border-radius: 0.75rem;
-    font-weight: 800;
+    color: #0b0e14 !important;
+    padding: 1.5rem 3rem;
+    border-radius: 1.25rem;
+    font-weight: 900;
+    font-size: 1.25rem;
     text-transform: uppercase;
     font-style: italic;
-    letter-spacing: 0.05em;
-    transition: all 0.2s ease;
-    box-shadow: 0 0 30px rgba(0, 245, 160, 0.3);
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 40px rgba(0, 245, 160, 0.4);
     border: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
   }
 
   .btn-vantix:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
+    box-shadow: 0 0 60px rgba(0, 245, 160, 0.6);
   }
 
-  .btn-vantix:active {
-    transform: scale(0.95);
+  /* The FIXED Input Field */
+  .command-input {
+    background: transparent;
+    color: white !important;
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    font-family: 'Archivo', sans-serif;
+    outline: none;
+    border: none;
+    width: 100%;
+    resize: none;
+  }
+  
+  .command-input::placeholder {
+    color: rgba(255, 255, 255, 0.15);
+    font-style: italic;
   }
 
-  .nav-item {
-    display: flex;
-    items-center: center;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: var(--text-dim);
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border-left: 4px solid transparent;
-  }
-
-  .nav-item:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .nav-item-active {
-    color: white;
-    background: rgba(255, 255, 255, 0.05);
-    border-left-color: var(--emerald-pure);
-  }
-
-  /* Typography Scales */
+  /* Massive Typography */
   .text-industrial {
-    font-size: 3.5rem;
-    font-weight: 800;
+    font-size: 5rem; /* Massive Scale */
+    font-weight: 900;
     font-style: italic;
     text-transform: uppercase;
-    letter-spacing: -0.05em;
-    line-height: 0.85;
+    letter-spacing: -0.06em;
+    line-height: 0.8;
     color: white;
+  }
+
+  .text-sub-industrial {
+     font-size: 1.25rem;
+     font-weight: 600;
+     color: var(--text-dim);
+     text-transform: uppercase;
+     letter-spacing: 0.3em;
   }
 }
 
-/* Central Radial Glow */
+/* Central Radial Glow - Intense */
 .radial-center-glow {
-  background: radial-gradient(circle at center, rgba(0, 245, 160, 0.05) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(0, 245, 160, 0.08) 0%, transparent 80%);
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
+  width: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 245, 160, 0.2);
   border-radius: 10px;
+}
+
+.scroll-hide::-webkit-scrollbar {
+  display: none;
 }
