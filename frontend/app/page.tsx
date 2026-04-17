@@ -10,10 +10,13 @@ import ToxicityGauge from "@/components/ToxicityGauge";
 interface AnalysisResult {
   smiles: string;
   valid: boolean;
-  toxicity_percent: number;
-  toxicity_class: string;
-  confidence: number;
-  top_classes?: Array<{ class: string; confidence: number }>;
+  toxicity?: {
+    toxicity_percent: number;
+    toxicity_class: string;
+    confidence: number;
+    top_classes?: Array<{ class: string; confidence: number }>;
+    atom_scores?: number[];
+  };
   properties?: {
     mol_wt: number;
     logp: number;
@@ -28,7 +31,6 @@ interface AnalysisResult {
   };
   svg?: string;
   pdb?: string;
-  atom_scores?: number[];
   error?: string;
 }
 
@@ -192,7 +194,7 @@ export default function Home() {
                         </div>
                     ) : (
                         <div className="w-full h-full min-h-[450px]">
-                            <Molecule3D pdb={result.pdb || ""} atomScores={sentinelVision ? result.atom_scores : undefined} />
+                            <Molecule3D pdb={result.pdb || ""} atomScores={sentinelVision ? result.toxicity?.atom_scores : undefined} />
                         </div>
                     )}
                     
@@ -241,14 +243,14 @@ export default function Home() {
                 </h3>
 
                 <div className="flex justify-center mb-10">
-                    <ToxicityGauge percent={result.toxicity_percent} />
+                    <ToxicityGauge percent={result.toxicity?.toxicity_percent || 0} />
                 </div>
 
                 <div className="space-y-6">
                     <div>
                         <div className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-2">Primary Classification</div>
                         <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
-                            <span className="text-lg font-bold text-emerald-400 capitalize">{result.toxicity_class}</span>
+                            <span className="text-lg font-bold text-emerald-400 capitalize">{result.toxicity?.toxicity_class}</span>
                             <span className="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-bold">TOP MATCH</span>
                         </div>
                     </div>
@@ -258,7 +260,7 @@ export default function Home() {
                         <Share2 className="w-3 h-3" /> Latent Space Probabilities
                       </div>
                       <div className="space-y-3">
-                        {result.top_classes?.slice(0, 3).map((cls, j) => (
+                        {result.toxicity?.top_classes?.slice(0, 3).map((cls, j) => (
                             <div key={j} className="relative">
                                 <div className="flex justify-between text-xs mb-1 font-medium">
                                     <span className="text-slate-400">{cls.class}</span>
@@ -284,14 +286,14 @@ export default function Home() {
                     <div>
                         <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">AI Verdict</div>
                         <p className="text-xs text-slate-400 leading-relaxed italic">
-                            Structural motifs identified in the {result.toxicity_class.toLowerCase()} cluster signify a {result.toxicity_percent > 70 ? 'CRITICAL' : result.toxicity_percent > 40 ? 'MODERATE' : 'LOW'} elevation in risk. Sentinel Vision heatmap reflects GNN attribution scores.
+                            Structural motifs identified in the {result.toxicity?.toxicity_class?.toLowerCase()} cluster signify a {(result.toxicity?.toxicity_percent || 0) > 70 ? 'CRITICAL' : (result.toxicity?.toxicity_percent || 0) > 40 ? 'MODERATE' : 'LOW'} elevation in risk. Sentinel Vision heatmap reflects GNN attribution scores.
                         </p>
                     </div>
                 </div>
               </div>
 
               {/* Warnings/Advisory */}
-              {result.toxicity_percent > 80 && (
+              {(result.toxicity?.toxicity_percent || 0) > 80 && (
                   <motion.div 
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
