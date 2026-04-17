@@ -198,7 +198,7 @@ export default function Home() {
                     
                     <div className="relative">
                        <div className="text-[18rem] font-black italic text-white leading-none tracking-tighter drop-shadow-[0_0_120px_rgba(0,245,160,0.3)]">
-                          {result.overall_toxicity_index.toFixed(4)}
+                          {result.overall_toxicity_index}
                        </div>
                        <div className="absolute -right-24 bottom-12 text-6xl font-black text-[#00f5a0] italic">/ 10.0</div>
                     </div>
