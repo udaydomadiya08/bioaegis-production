@@ -13,5 +13,10 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      - name: Push to HF
-        run: git push --force https://${{ secrets.HF_TOKEN }}@huggingface.co/spaces/UDAYDOMADIYA/bioaegis-api main
+      - name: Sync to Hugging Face Hub
+        uses: huggingface/hub-sync@v0.1.0
+        with:
+          github_repo_id: ${{ github.repository }}
+          huggingface_repo_id: UDAYDOMADIYA/bioaegis-api
+          hf_token: ${{ secrets.HF_TOKEN }}
+          repo_type: space
