@@ -175,11 +175,18 @@ class UltimateEngine:
             atom_scores = (atom_scores - atom_scores.min()) / (atom_scores.max() - atom_scores.min() + 1e-6)
             
             return {
-                "overall_toxicity_index": overall_index_4dec,
+                "overall_toxicity_index": f"{oti:.4f}",
                 "overall_percent": round(probs.max().item() * 100, 2),
                 "expert_profiling": expert_results,
-                "atom_scores": atom_scores.cpu().detach().tolist(),
-                "status": "BioAegis 13-Expert Ensemble Active"
+                "expert_diagnostics": expert_statuses,
+                "safety_clearances": safety_clearances,
+                "primary_hazard": primary_hazard,
+                "hazard_confidence": round(probs.max().item() * 100, 1),
+                "classification": classification,
+                "explanation": {
+                    "atom_scores": atom_scores.tolist(),
+                    "smiles": smiles
+                }
             }
         except Exception as e:
             print(f"Ultimate Inference Error: {e}")
