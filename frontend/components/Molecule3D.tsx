@@ -97,12 +97,12 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
         });
     }
 
-    // Set Industrial Zoom Guards: Expanded (0.1 - 5.0) for Full Envelope Visibility
+    // Set Industrial Zoom Guards: Expanded (0.01 - 10.0) for Absolute Navigational Freedom
     if (viewer.setZoomLimits) {
-        viewer.setZoomLimits(0.1, 5.0);
+        viewer.setZoomLimits(0.01, 10.0);
     }
 
-    viewer.zoomTo();
+    viewer.zoomTo(0.7); // Fit to 70% of viewport for full visibility
     viewer.render();
     setIsLoaded(true);
 
