@@ -1,66 +1,62 @@
----
-title: BioAegis X-Alpha API
-emoji: 🧪
-colorFrom: green
-colorTo: blue
-sdk: docker
-pinned: false
----
-
 # 🛰️ BioAegis X-Alpha: 13-Expert Toxicity Ensemble
 
-**Industrial-grade drug toxicity profiling through a high-precision ensemble of 13 independent GNN binary classifiers.**
+[![Vercel Deployment](https://img.shields.io/badge/Deployment-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://bioaegis-production.vercel.app/)
+[![HuggingFace Space](https://img.shields.io/badge/Inference-HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/spaces/UDAYDOMADIYA/bioaegis-api)
+[![Tech Stack](https://img.shields.io/badge/Stack-GNN--RDKit--PyG-00ffcc?style=for-the-badge)](https://github.com/udaydomadiya08/bioaegis-production)
 
-BioAegis X-Alpha is a state-of-the-art bioinformatics platform. Optimized for the **Operation Multi-Head** synthesis, it orchestrates a **shared-backbone GNN architecture** to provide granular risk profiling across 13 distinct biological vectors, alongside a mathematically rigorous **Overall Toxicity Index (1.0000 - 10.0000).**
-
-### **The Platform** is an elite diagnostic node designed for high-fidelity molecular threat detection. By utilizing an autonomous ensemble of 13 molecular specialists, it provides rapid, atom-wise structural attribution heatmaps for pharmaceutical safety.
-
----
-
-## 💎 Features of the Operational Deck
-- **GNN-Powered Inference**: Advanced predictive modeling trained on 378k+ molecules with a **94.25% validation accuracy**.
-- **Structural Attribution Heatmaps**: Real-time gradient-based saliency maps visualized on 3D molecular structures.
-- **High-Fidelity Properties**: Instant computation of LogP (Hydrophobicity), TPSA (Polarity), and Molecular Weight.
-- **The Golden Scale UI**: A premium, "Industrial Emerald" interface built for professional pharmaceutical authority and readability.
+**BioAegis X-Alpha** is an industrial-grade molecular toxicity profiling platform. By orchestrating a high-precision ensemble of **13 independent Graph Neural Network (GNN) specialists**, it provides granular risk assessments across the entire pharmacological spectrum.
 
 ---
 
-## 🛠️ Technical Stack
-- **Frontend**: Next.js 16 (Turbopack), Framer Motion, Tailwind CSS, Lucide Icons.
-- **Backend Infrastructure**: FastAPI (Python), RDKit, PyTorch Geometric.
-- **Neural Hardware**: Deployed via Hugging Face Inference Nodes.
-- **Launch Vector**: [bioaegis-production.vercel.app](https://bioaegis-production.vercel.app/)
+## 💎 Molecular Command Deck
+- **13-Expert Ensemble**: Real-time consensus from 13 independent GNN binary classifiers (Cardiotoxicity, Hepatotoxicity, Mutagenicity, etc.).
+- **ROC-J Statistical Hardening**: Every decision boundary is mathematically absolute, derived using **Youden's J-Statistic** for maximum diagnostic power.
+- **3D Structural Attribution**: Saliency heatmaps projected onto atom-wise 3D conformers with a **boundary-free deep-zoom (0.001)** viewport.
+- **Industrial Emerald UI**: A premium, high-retention dashboard built with Next.js 16 (Turbopack) and Framer Motion.
 
 ---
 
-## 🚀 Rapid Deployment Cycle
+## 🏗️ Technical Architecture
 
-### 1. Model Cluster Configuration
-```bash
-# Clone the Core Repository
-git clone https://github.com/udaydomadiya08/bioaegis-production.git
+```mermaid
+graph TD
+    A[SMILES String] --> B[Chemistry Engine]
+    B --> C[3D Conformer Gen]
+    B --> D[Physicochemical Props]
+    A --> E[GNN Backbone]
+    E --> F[13-Expert Ensemble]
+    F --> G[ROC-J Calibration]
+    G --> H[Consensus Verdict]
+    H --> I[Industrial Dashboard]
+    C --> I
+    D --> I
 ```
 
-### 2. Neural Backend Initialization
-```bash
-cd api
-pip install -r requirements.txt
-python main.py
-```
+### **1. Neural Core**
+The GNN architecture utilizes a shared-backbone feature extractor with 13 specialized heads. Trained on **378k+ clinical data points**, the engine achieves a **94.25% validation accuracy** through rigorous statistical calibration.
 
-### 3. Front-End Command Deck
-```bash
-cd frontend
-npm install
-npm run dev
-```
+### **2. Statistical Pass**
+Each expert is linked to a hardened decision matrix derived from ROC analysis of the master pharmacological dataset. This eliminates heuristic bias and ensures a statistically absolute "Pass/Toxic" boundary.
 
 ---
 
-## 🔐 Compliance & Security
-This platform is designed for **Advanced Pharmacological Discovery**. All inference nodes are encrypted and optimized for high-throughput diagnostic environments.
+## 🚀 Deployment & Usage
+
+### **HuggingFace Infrastructure (Backend)**
+The API is deployed as a Dockerized FastAPI node on HuggingFace, providing encrypted high-throughput inference.
+
+### **Vercel Navigation (Frontend)**
+The primary research deck is available at:
+👉 **[bioaegis-production.vercel.app](https://bioaegis-production.vercel.app/)**
 
 ---
 
-### **© 2026 BIOAEGIS X-ALPHA | PHARMACOLOGICAL DISCOVERY NODE**
-*Status: Operational | Cluster: 08-Alpha | Region: US-EAST*
+## 🛠️ Stack Components
+- **Neural Framework**: PyTorch Geometric, RDKit, NumPy (Vectorized ROC-J).
+- **Core API**: FastAPI, Uvicorn, Docker.
+- **Frontend Deck**: Next.js 16, Tailwind CSS, 3Dmol.js, Framer Motion.
+
+---
+
+### **© 2026 BIOAEGIS DISCOVERY HUB | PHARMACOLOGICAL DISCOVERY NODE**
+*Industrial Integrity | Cluster: GNN-PRO-08 | Operational Status: Symmetrical*
