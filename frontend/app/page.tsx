@@ -299,7 +299,7 @@ export default function Home() {
                        <h3 className="text-4xl font-black uppercase italic leading-none tracking-normal">GNN Structural Attribution</h3>
                     </div>
                     <div className="command-card relative h-[600px] overflow-hidden !p-0 border-4 border-white/20">
-                       <Molecule3D pdb={result.pdb || ""} atomScores={result.atom_scores} />
+                       <Molecule3D pdb={result.pdb || ""} atomScores={result.explanation.atom_scores} />
                        <div className="absolute bottom-10 left-10 z-20 bg-[#0d1117]/95 px-10 py-6 rounded-3xl border-2 border-[#00f5a0]/60 flex items-center gap-8 shadow-2xl">
                           <Target className="w-10 h-10 text-[#00f5a0]" />
                           <div className="flex flex-col gap-1">
