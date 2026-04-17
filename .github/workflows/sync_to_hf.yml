@@ -14,4 +14,4 @@ jobs:
           fetch-depth: 0
           lfs: true
       - name: Push to HF
-        run: git push --force https://x:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/UDAYDOMADIYA/bioaegis-api main
+        run: git push --force https://UDAYDOMADIYA:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/UDAYDOMADIYA/bioaegis-api main
