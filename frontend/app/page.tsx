@@ -3,22 +3,18 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  LayoutDashboard, 
-  Settings, 
+  ShieldAlert, 
   Terminal, 
   Zap, 
-  ShieldAlert, 
   Layers, 
-  Box, 
   Database,
-  Activity,
   Globe,
   Radio,
   Share2,
   ChevronRight,
-  User,
-  LogOut,
-  Info
+  Info,
+  Cpu,
+  Box
 } from "lucide-react";
 import MoleculeViewer from "@/components/MoleculeViewer";
 import Molecule3D from "@/components/Molecule3D";
@@ -51,7 +47,6 @@ export default function Home() {
   const [smiles, setSmiles] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [activeNav, setActiveNav] = useState("Dashboard");
 
   const handleAnalyze = async () => {
     if (!smiles) return;
@@ -78,222 +73,160 @@ export default function Home() {
     }
   };
 
-  const navItems = [
-    { name: "Dashboard", icon: LayoutDashboard },
-    { name: "Neural Hub", icon: Zap },
-    { name: "Structural AI", icon: Box },
-    { name: "API Vault", icon: Database },
-    { name: "Command Center", icon: Terminal }
+  const examples = [
+    { name: "Aspirin", smiles: "CC(=O)Oc1ccccc1C(=O)O" },
+    { name: "Caffeine", smiles: "CN1C=NC2=C1C(=O)N(C(=O)N2C)C" },
+    { name: "Sarin", smiles: "CCP(=O)(F)OC(C)C" }
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#0d1117] text-[#c9d1d9] overflow-hidden">
-      {/* Structural Sidebar */}
-      <aside className="w-[var(--sidebar-w)] bg-[#0b0e14] border-r border-white/5 flex flex-col z-50">
-        <div className="p-8 flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#00f5a0] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,245,160,0.4)]">
-             <ShieldAlert className="text-[#0b0e14] w-6 h-6" />
+    <main className="min-h-screen bg-[#0d1117] text-[#c9d1d9] flex flex-col pointer-events-auto radial-center-glow p-8 md:p-12 overflow-x-hidden">
+      {/* High-Impact Brand Header */}
+      <header className="flex flex-col md:flex-row items-center justify-between mb-20 gap-8">
+        <div className="flex items-center gap-6">
+          <div className="w-14 h-14 bg-[#00f5a0] rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(0,245,160,0.5)]">
+            <ShieldAlert className="text-[#0b0e14] w-8 h-8" />
           </div>
-          <span className="font-extrabold italic text-xl text-white tracking-tighter uppercase">BioAegis</span>
-        </div>
-
-        <nav className="flex-1 mt-6">
-          {navItems.map((item) => (
-            <div 
-              key={item.name}
-              onClick={() => setActiveNav(item.name)}
-              className={`nav-item ${activeNav === item.name ? 'nav-item-active' : ''}`}
-            >
-              <item.icon className="w-5 h-5" />
-              <span>{item.name}</span>
+          <div>
+            <h1 className="text-4xl font-extrabold italic uppercase tracking-tighter text-white">BioAegis <span className="text-[#00f5a0]">X-Alpha</span></h1>
+            <div className="flex items-center gap-2 text-[10px] text-[#8b949e] font-black uppercase tracking-[0.4em]">
+               <Radio className="w-3 h-3 text-[#00f5a0] animate-pulse" /> Operational Core | Cluster 08
             </div>
-          ))}
-        </nav>
-
-        <div className="p-6 border-t border-white/5 space-y-6">
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center border border-white/10 overflow-hidden">
-               <User className="text-white/40 w-6 h-6" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-white">uday_cluster</div>
-              <div className="text-[10px] text-[#8b949e]">Operator Node</div>
-            </div>
-            <LogOut className="w-4 h-4 text-[#8b949e] ml-auto hover:text-white cursor-pointer" />
-          </div>
-          
-          <div className="bg-[#161b22] p-4 rounded-xl border border-white/5">
-             <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-[#8b949e] mb-2">
-                <span>Industrial Power</span>
-                <Info className="w-3 h-3" />
-             </div>
-             <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
-                <div className="h-full w-[80%] bg-[#00f5a0] shadow-[0_0_10px_#00f5a0]" />
-             </div>
-             <button className="w-full mt-4 py-2 border border-[#00f5a0]/30 rounded-lg text-[10px] font-black uppercase text-[#00f5a0] hover:bg-[#00f5a0]/5 transition-all">Upgrade Node</button>
           </div>
         </div>
-      </aside>
-
-      {/* Main Command Deck */}
-      <main className="flex-1 relative flex flex-col radial-center-glow overflow-y-auto scroll-hide">
-        {/* Top Operational bar */}
-        <header 
-          className="px-10 py-6 flex items-center justify-between pointer-events-none sticky top-0 bg-[#0d1117]/80 z-40 border-b border-white/5"
-          style={{ backdropFilter: 'blur(12px)' }}
-        >
-          <div className="flex items-center gap-4">
-             <div className="text-[10px] bg-white/5 px-2 py-0.5 rounded border border-white/10 font-black uppercase tracking-widest text-[#00f5a0]">Vantix Node v1.1.0</div>
-             <div className="h-4 w-px bg-white/10" />
-             <div className="flex items-center gap-2 text-[10px] text-[#8b949e] font-black uppercase tracking-widest">
-                <Radio className="w-3 h-3 text-[#00f5a0] animate-pulse" /> Synthesis Cluster Active
-             </div>
-          </div>
-          <Settings className="w-5 h-5 text-[#8b949e] cursor-pointer pointer-events-auto hover:text-white" />
-        </header>
-
-        {/* Content Section */}
-        <div className="px-12 py-12 space-y-12">
-          {/* Industrial Hero */}
-          <section className="space-y-4">
-            <motion.h1 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="text-industrial text-white"
-            >
-              BioAegis <br/> <span className="text-[#00f5a0]">Industrial</span>
-            </motion.h1>
-            <p className="text-lg text-[#8b949e] max-w-2xl leading-relaxed italic">
-               Orchestrate high-throughput structural synthesis with zero latency. <br/>
-               The world's most advanced autonomous toxicity predictor.
-            </p>
-          </section>
-
-          {/* Synthesis Input Group */}
-          <section className="command-card p-1 items-center flex overflow-hidden group focus-within:border-[#00f5a0]/30 transition-all">
-             <textarea 
-               value={smiles}
-               onChange={(e) => setSmiles(e.target.value)}
-               placeholder="Input topic, chemical vector, or research identifier..."
-               className="flex-1 bg-transparent px-8 py-8 text-xl text-white outline-none resize-none font-bold placeholder:text-white/10 h-24 scroll-hide"
-             />
-             <div className="pr-4">
-               <button 
-                 onClick={handleAnalyze}
-                 disabled={isAnalyzing}
-                 className="btn-vantix"
-               >
-                 {isAnalyzing ? "Processing..." : "Initiate Connection"}
-               </button>
-             </div>
-          </section>
-
-          <AnimatePresence>
-            {result ? (
-              <motion.div 
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-10"
-              >
-                {/* 3D Visualizer */}
-                <div className="lg:col-span-12">
-                   <div className="flex items-center gap-3 mb-6 text-[#00f5a0]">
-                      <Radio className="w-5 h-5 animate-pulse" />
-                      <h3 className="text-sm font-black uppercase tracking-widest italic leading-none">Active Production Stream</h3>
-                   </div>
-                    <div className="command-card relative h-[600px] overflow-hidden group">
-                      <div 
-                        className="absolute top-6 left-6 z-10 flex items-center gap-3 bg-black/40 px-4 py-2 rounded-xl border border-white/5"
-                        style={{ backdropFilter: 'blur(12px)' }}
-                      >
-                         <div className="w-2 h-2 bg-[#00f5a0] rounded-full animate-ping" />
-                         <span className="text-[10px] font-black uppercase text-white tracking-widest italic">Neural Visualizer Active</span>
-                      </div>
-                      <Molecule3D pdb={result.pdb || ""} atomScores={result.toxicity?.atom_scores} />
-                   </div>
-                </div>
-
-                {/* Data Points */}
-                <div className="lg:col-span-8 space-y-6">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="command-card p-8 flex items-center justify-between group">
-                         <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 bg-[#00f5a0]/10 rounded-2xl flex items-center justify-center border border-[#00f5a0]/20">
-                               <Layers className="text-[#00f5a0] w-8 h-8" />
-                            </div>
-                            <div>
-                               <div className="text-[10px] font-black uppercase text-[#8b949e] tracking-widest mb-1">Syndrome Class</div>
-                               <div className="text-2xl font-black text-white capitalize italic">{result.toxicity?.toxicity_class}</div>
-                            </div>
-                         </div>
-                         <ChevronRight className="text-[#8b949e] group-hover:translate-x-1 transition-all" />
-                      </div>
-                      <div className="command-card p-8 flex items-center justify-between group">
-                         <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 bg-[#00d2ff]/10 rounded-2xl flex items-center justify-center border border-[#00d2ff]/20">
-                               <Database className="text-[#00d2ff] w-8 h-8" />
-                            </div>
-                            <div>
-                               <div className="text-[10px] font-black uppercase text-[#8b949e] tracking-widest mb-1">Molecular Index</div>
-                               <div className="text-2xl font-black text-white italic">{result.properties?.mol_wt.toFixed(1)} MW</div>
-                            </div>
-                         </div>
-                         <ChevronRight className="text-[#8b949e] group-hover:translate-x-1 transition-all" />
-                      </div>
-                   </div>
-
-                   <div className="command-card p-10 flex items-start gap-8">
-                      <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shrink-0">
-                         <Share2 className="text-[#8b949e] w-6 h-6" />
-                      </div>
-                      <div className="space-y-6 flex-1">
-                         <span className="text-[10px] font-black uppercase text-[#8b949e] tracking-widest block">Structural Latent Space</span>
-                         <div className="space-y-4">
-                            {result.toxicity?.top_classes?.slice(0, 3).map((cls, j) => (
-                               <div key={j} className="space-y-2">
-                                  <div className="flex justify-between text-xs font-bold uppercase">
-                                     <span className="text-white/40">{cls.class}</span>
-                                     <span className="text-[#00f5a0]">{(cls.confidence * 100).toFixed(1)}%</span>
-                                  </div>
-                                  <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                                     <motion.div initial={{ width: 0 }} animate={{ width: `${cls.confidence * 100}%` }} className="h-full bg-[#00f5a0] shadow-[0_0_10px_#00f5a0]" />
-                                  </div>
-                               </div>
-                            ))}
-                         </div>
-                      </div>
-                   </div>
-                </div>
-
-                {/* Right Rail: Gauge */}
-                <div className="lg:col-span-4 h-full">
-                   <div className="command-card p-10 h-full flex flex-col items-center justify-center">
-                      <ToxicityGauge percent={result.toxicity?.toxicity_percent || 0} />
-                      <div className="mt-12 p-6 bg-white/5 border border-white/5 rounded-2xl text-xs text-[#8b949e] leading-relaxed italic text-center">
-                         Neural analysis confirms structural motifs in the {result.toxicity?.toxicity_class.toLowerCase()} cluster. Sentinel vision has identified high-attribution atoms for production review.
-                      </div>
-                   </div>
-                </div>
-              </motion.div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-24 opacity-20 border-2 border-dashed border-white/5 rounded-[4rem]">
-                 <Globe className="w-32 h-32 mb-8" />
-                 <h2 className="text-4xl font-black italic tracking-tighter text-white">System Idle</h2>
-                 <p className="text-[#8b949e] uppercase font-bold tracking-[0.4em] mt-4">Initiate Connection to Synthesize Results</p>
-              </div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Branding Footer */}
-        <footer className="px-12 py-12 flex items-center justify-between text-[11px] font-bold text-[#8b949e] uppercase tracking-[0.4em]">
-           <div>© 2026 BioAegis X-Alpha Platform | Secure Neural Bridge</div>
-           <div className="flex gap-10">
-              <span className="text-[#00f5a0]/40">Node: Operational</span>
-              <span>Cluster: 08-Alpha</span>
+        
+        <div className="flex items-center gap-6 bg-[#161b22] px-8 py-4 rounded-2xl border border-white/5">
+           <div className="flex flex-col">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#8b949e]">System Integrity</span>
+              <span className="text-sm font-bold text-white">99.8% Operational</span>
            </div>
-        </footer>
-      </main>
-    </div>
+           <div className="h-8 w-px bg-white/10" />
+           <Cpu className="text-[#00f5a0] w-6 h-6 animate-pulse" />
+        </div>
+      </header>
+
+      {/* Industrial Hero Command Section */}
+      <section className="max-w-6xl mx-auto w-full mb-20">
+        <motion.h2 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text- औद्योगिक text-industrial text-white mb-6"
+        >
+          Structural <br/> <span className="text-[#00f5a0]">Toxicity</span> Discovery
+        </motion.h2>
+        <p className="text-xl text-[#8b949e] max-w-2xl leading-relaxed italic mb-12">
+           Orchestrate high-throughput molecular analysis with zero operating latency. <br/>
+           Input a SMILES string to initiate global neural synthesis.
+        </p>
+
+        {/* The Synthesis Input Engine */}
+        <div className="command-card p-1 flex items-center overflow-hidden focus-within:border-[#00f5a0]/40 transition-all">
+           <textarea 
+             value={smiles}
+             onChange={(e) => setSmiles(e.target.value)}
+             placeholder="Input Topic, Molecular Vector, or SMILES Identifier..."
+             className="flex-1 bg-transparent px-8 py-10 text-2xl text-white outline-none resize-none font-bold placeholder:text-white/10 h-28 scroll-hide"
+           />
+           <div className="pr-6">
+             <button 
+               onClick={handleAnalyze}
+               disabled={isAnalyzing}
+               className="btn-vantix text-lg"
+             >
+               {isAnalyzing ? "Processing..." : "Initiate Connection"}
+             </button>
+           </div>
+        </div>
+
+        <div className="flex gap-4 mt-8 px-2 overflow-x-auto scroll-hide">
+           {examples.map((ex) => (
+             <button 
+               key={ex.name}
+               onClick={() => setSmiles(ex.smiles)}
+               className="px-6 py-3 rounded-xl bg-white/5 border border-white/5 hover:border-[#00f5a0]/30 hover:bg-[#00f5a0]/5 transition-all text-[11px] font-black uppercase tracking-widest text-[#8b949e] whitespace-nowrap"
+             >
+               {ex.name}
+             </button>
+           ))}
+        </div>
+      </section>
+
+      {/* Main Analysis Architecture */}
+      <AnimatePresence>
+        {result ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-[1600px] mx-auto w-full"
+          >
+            {/* Visualizer Panel */}
+            <div className="lg:col-span-8 flex flex-col gap-6">
+               <div className="flex items-center gap-3 text-[#00f5a0] mb-4">
+                  <Globe className="w-5 h-5 animate-spin-slow" />
+                  <h3 className="text-sm font-black uppercase tracking-widest italic leading-none">Primary Structural Stream</h3>
+               </div>
+               <div className="command-card relative h-[650px] overflow-hidden group">
+                  <div className="absolute top-8 left-8 z-10 flex items-center gap-4 bg-[#0b0e14]/80 backdrop-blur-xl px-6 py-3 rounded-2xl border border-white/10">
+                     <div className="w-2.5 h-2.5 bg-[#00f5a0] rounded-full animate-ping" />
+                     <span className="text-[11px] font-black uppercase text-white tracking-[0.2em] italic">Neural Sentinel Online</span>
+                  </div>
+                  <Molecule3D pdb={result.pdb || ""} atomScores={result.toxicity?.atom_scores} />
+               </div>
+            </div>
+
+            {/* Results Deck */}
+            <div className="lg:col-span-4 flex flex-col gap-10">
+               <section className="command-card p-10 flex flex-col items-center justify-center bg-[#00f5a0]/[0.02]">
+                  <ToxicityGauge percent={result.toxicity?.toxicity_percent || 0} />
+                  <div className="mt-12 text-center space-y-4">
+                     <div className="text-[12px] font-black uppercase text-[#8b949e] tracking-[0.4em]">Primary Cluster</div>
+                     <div className="text-5xl font-black text-white italic capitalize tracking-tighter">{result.toxicity?.toxicity_class}</div>
+                  </div>
+               </section>
+
+               <div className="grid grid-cols-2 gap-6">
+                  {[
+                    { l: "LogP", v: result.properties?.logp.toFixed(2), i: Activity },
+                    { l: "TPSA", v: result.properties?.tpsa.toFixed(1), i: Database },
+                    { l: "Mol Wt", v: result.properties?.mol_wt.toFixed(1), i: Zap },
+                    { l: "Donors", v: result.properties?.h_donors, i: Box }
+                  ].map((p, i) => (
+                    <div key={i} className="command-card p-6 flex flex-col gap-4">
+                       <p.i className="text-[#8b949e] w-4 h-4" />
+                       <div>
+                          <div className="text-[10px] font-black uppercase text-[#8b949e] tracking-widest mb-1">{p.l}</div>
+                          <div className="text-2xl font-black text-white italic">{p.v}</div>
+                       </div>
+                    </div>
+                  ))}
+               </div>
+
+               <div className="command-card p-8 bg-white/5 border-emerald-500/10">
+                  <div className="flex items-start gap-4 text-xs text-[#8b949e] leading-relaxed italic">
+                     <Info className="w-5 h-5 text-[#00f5a0] shrink-0" />
+                     <span>
+                        Automated neural diagnostic identifies high-attribution structural motifs. 
+                        Toxicity probability index calibrated at <b>{(result.toxicity?.confidence || 0 * 100).toFixed(1)}%</b> confidence for the {result.toxicity?.toxicity_class} network.
+                     </span>
+                  </div>
+               </div>
+            </div>
+          </motion.div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-40 opacity-10 border-4 border-dashed border-white/5 rounded-[4rem] max-w-6xl mx-auto w-full">
+             <Radio className="w-32 h-32 mb-8 animate-pulse text-white" />
+             <h2 className="text-5xl font-black italic tracking-tighter text-white uppercase">System Awaiting Vector</h2>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <footer className="mt-auto pt-24 pb-12 flex flex-col md:flex-row items-center justify-between text-[11px] font-bold text-[#8b949e] uppercase tracking-[0.5em] gap-8">
+        <div>© 2026 BIOAEGIS X-ALPHA | INDUSTRIAL DATA CLUSTER</div>
+        <div className="flex gap-12">
+           <span className="text-[#00f5a0]/40">Status: Operational</span>
+           <span>Node: 08-Alpha</span>
+        </div>
+      </footer>
+    </main>
   );
 }
