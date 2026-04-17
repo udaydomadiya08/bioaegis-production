@@ -1,9 +1,13 @@
 # Data and Shards
-data/
+data/mp_dataf.csv
+data/literature_survey.csv
 *.csv
-*.pt.gz
 *.pth
 *.pkl
+
+# Explicitly Allow Shards
+!data/shards/
+!data/shards/*.pt.gz
 
 # Models directory (Upload manually to Hugging Face)
 models/
