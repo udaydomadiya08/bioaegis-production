@@ -28,6 +28,7 @@ pinned: false
 ## 🏗️ Technical Architecture
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#00f5a0', 'primaryTextColor': '#000', 'primaryBorderColor': '#00f5a0', 'lineColor': '#00f5a0', 'secondaryColor': '#00d2ff', 'tertiaryColor': '#fff'}}}%%
 graph TD
     A[SMILES String] --> B[Chemistry Engine]
     B --> C[3D Conformer Gen]
