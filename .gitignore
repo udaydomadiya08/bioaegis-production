@@ -9,8 +9,12 @@ data/literature_survey.csv
 !data/shards/
 !data/shards/*.pt.gz
 
-# Models directory (Upload manually to Hugging Face)
-models/
+# Models directory (Synchronized to Hugging Face core)
+models/ultimate_bioaegis_ensemble.pth
+models/label_map.pkl
+!models/
+!models/*.pth
+!models/*.pkl
 !api/package.zip
 
 # Logs and PIDs
