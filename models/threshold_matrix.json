@@ -1,0 +1,15 @@
+{
+    "Cardiotoxicity": 0.9,
+    "Reproductive toxicity": 0.9,
+    "Liver toxicity": 0.1,
+    "Genotoxicity": 0.9,
+    "Hepatotoxicity": 0.9,
+    "Eye corrosion": 0.1,
+    "Eye irritation": 0.9,
+    "Zinc toxicity": 0.9,
+    "Mutagenecity": 0.9,
+    "Respiratory toxicity": 0.9,
+    "Skin toxicity": 0.1,
+    "Carcinogenicity": 0.9,
+    "Acute Toxicity": 0.9
+}

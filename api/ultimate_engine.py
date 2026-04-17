@@ -78,12 +78,16 @@ class UltimateEngine:
         if os.path.exists(self.model_path):
             state_dict = torch.load(self.model_path, map_location=self.device, weights_only=False)
             try:
-                self.model.load_state_dict(state_dict, strict=False)
-                print(f"✅ Ensemble Model Synchronized (14-Channel Core).")
-            except Exception as e:
-                print(f"⚠️ Weight Sync Warning: {e}. Skeleton active.")
+        
+        # Load Mathematical Threshold Matrix
+        self.threshold_matrix = {}
+        threshold_path = os.path.join(models_dir, "threshold_matrix.json")
+        if os.path.exists(threshold_path):
+            with open(threshold_path, 'r') as f:
+                self.threshold_matrix = json.load(f)
+            print(f"✅ Dynamic Threshold Matrix Loaded: {len(self.threshold_matrix)} boundaries active.")
         else:
-            print("⚠️ Warning: Production weights not found. Ensemble Skeleton active.")
+            print("⚠️ Warning: Threshold matrix not found. Defaulting to 0.5 logical midpoint.")
         
         self.model.eval()
 
@@ -113,22 +117,47 @@ class UltimateEngine:
             batch = Batch.from_data_list([data])
             
             # 3. Neural Expert Consensus
-            # logits: [1, 13] | regression: [1]
             logits, global_severity = self.model(batch)
+            probs = torch.sigmoid(logits)[0] # Shape [14]
             
-            # Apply Sigmoid for independent probabilities
-            probs = torch.sigmoid(logits)[0] # Shape [13]
-            
-            # Map probabilities to experts (Skip Index 2)
+            # 4. Expert Profiling & Threshold Diagnostics
             expert_results = {}
+            expert_statuses = {}
+            safety_clearances = []
+            
+            top_prob = -1.0
+            primary_hazard = "Unknown"
+            
             for i, name in enumerate(self.tox_experts):
                 if name is not None:
-                    expert_results[name] = round(probs[i].item() * 100, 2)
+                    prob_val = probs[i].item()
+                    percent = round(prob_val * 100, 2)
+                    threshold = self.threshold_matrix.get(name, 0.5)
+                    
+                    is_toxic = prob_val > threshold
+                    expert_results[name] = percent
+                    expert_statuses[name] = {
+                        "status": "TOXIC" if is_toxic else "NON-TOXIC",
+                        "threshold_percent": round(threshold * 100, 2),
+                        "passed": not is_toxic
+                    }
+                    
+                    if not is_toxic:
+                        safety_clearances.append(name)
+                        
+                    if prob_val > top_prob:
+                        top_prob = prob_val
+                        primary_hazard = name
             
-            # 4. Calculate Industrial Toxicity Index (1.0000 - 10.0000)
-            # Uses max expert confidence + weighted global mean
-            base_score = probs.max().item() * 9 + 1 # Map 0-1 to 1-10
-            overall_index_4dec = round(base_score, 4)
+            # 5. Calculate Industrial Toxicity Index (1.0000 - 10.0000)
+            base_score = probs.max().item() * 9 + 1
+            oti = round(base_score, 4)
+            
+            # Granular Classification
+            if oti < 3.0: classification = "Safe Compound"
+            elif oti < 5.5: classification = "Marginal Hazard"
+            elif oti < 8.0: classification = "Toxic Risk"
+            else: classification = "Critical Biohazard"
             
             # 5. Scientific Attribution (XAI)
             # Target the most critical expert head
