@@ -1,52 +1,39 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React from 'react';
+import { motion } from 'framer-motion';
 
 interface ToxicityGaugeProps {
   percent: number;
-  label?: string;
 }
 
-export default function ToxicityGauge({ percent, label }: ToxicityGaugeProps) {
-  const value = percent; // Maintain internal logic
+const ToxicityGauge: React.FC<ToxicityGaugeProps> = ({ percent }) => {
   const radius = 80;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (value / 100) * circumference;
+  const stroke = 12;
+  const normalizedRadius = radius - stroke * 2;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   const getColor = (val: number) => {
-    if (val < 30) return "#00ffcc"; // Safe
-    if (val < 70) return "#ffcc00"; // Warning
-    return "#ff3366"; // Danger
+    if (val > 80) return '#ef4444'; // Danger Red
+    if (val > 40) return '#f59e0b'; // Warning Orange
+    return '#10b981'; // Safe Emerald
   };
 
-  const color = getColor(value);
-
   return (
-    <div className="flex flex-col items-center justify-center space-y-4">
-      <div className="relative w-48 h-48">
+    <div className="relative flex items-center justify-center w-60 h-60">
+      {/* Outer Glow Ring */}
+      <div 
+        className="absolute inset-0 rounded-full opacity-10 blur-2xl transition-all duration-1000"
+        style={{ backgroundColor: getColor(percent) }}
+      />
+      
+      <svg
+        height={radius * 2}
+        width={radius * 2}
+        className="transform -rotate-90 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]"
+      >
         {/* Background Track */}
-        <svg className="w-full h-full transform -rotate-90">
-          <circle
-            cx="96"
-            cy="96"
-            r={radius}
-            stroke="currentColor"
-            strokeWidth="8"
-            fill="transparent"
-            className="text-white/5"
-          />
-          {/* Progress Bar */}
-          <motion.circle
-            cx="96"
-            cy="96"
-            r={radius}
-            stroke={color}
-            strokeWidth="8"
-            fill="transparent"
-            strokeDasharray={circumference}
-            initial={{ strokeDashoffset: circumference }}
-            animate={{ strokeDashoffset }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
             strokeLinecap="round"
             style={{ filter: `drop-shadow(0 0 8px ${color}88)` }}
           />

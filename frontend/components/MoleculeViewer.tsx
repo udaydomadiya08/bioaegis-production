@@ -9,27 +9,18 @@ interface MoleculeViewerProps {
 
 export default function MoleculeViewer({ svg, isAnalyzing }: MoleculeViewerProps) {
   return (
-    <div className="relative glass-card flex items-center justify-center min-h-[400px] group overflow-hidden bg-black/40">
+    <div className="relative group overflow-hidden flex items-center justify-center min-h-[300px]">
       {svg ? (
-        <>
-          <div 
-            className={`w-full h-full flex items-center justify-center transition-opacity duration-500 ${isAnalyzing ? 'opacity-40 grayscale' : 'opacity-100'}`}
-            dangerouslySetInnerHTML={{ __html: svg }}
-          />
-          {isAnalyzing && (
-            <div className="absolute inset-0 scanner-anim pointer-events-none" />
-          )}
-          <div className="absolute bottom-4 left-4 flex gap-2">
-            <span className="text-[10px] uppercase tracking-widest text-primary/60 font-mono">Structure Rendered</span>
-            <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
-          </div>
-        </>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className={`w-full h-full flex items-center justify-center transition-all duration-700 ${isAnalyzing ? 'opacity-40 grayscale' : 'opacity-100 invert brightness-[2] contrast-[1.5] saturate-0'}`}
+          dangerouslySetInnerHTML={{ __html: svg }}
+        />
       ) : (
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 border-2 border-dashed border-white/20 rounded-full mx-auto animate-spin-slow flex items-center justify-center">
-            <div className="w-12 h-12 border-2 border-primary/20 rounded-full animate-pulse" />
-          </div>
-          <p className="text-sm text-foreground/40 font-mono uppercase tracking-tighter">Awaiting Chemical Input</p>
+        <div className="text-center opacity-20">
+          <div className="w-16 h-16 border-2 border-dashed border-white/20 rounded-full mx-auto animate-spin-slow" />
+          <p className="text-[10px] font-bold uppercase tracking-widest mt-4">Awaiting Signal</p>
         </div>
       )}
     </div>

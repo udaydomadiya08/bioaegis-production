@@ -1,8 +1,20 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Activity, FlaskConical, History, ShieldAlert, Zap, Search, Beaker, Database, Eye, Box, Share2, Info, ChevronRight, AlertTriangle } from "lucide-react";
+import { 
+  Activity, 
+  Terminal, 
+  ShieldAlert, 
+  Layers, 
+  Box, 
+  Info, 
+  Zap, 
+  Cpu, 
+  ChevronRight,
+  Database,
+  Globe
+} from "lucide-react";
 import MoleculeViewer from "@/components/MoleculeViewer";
 import Molecule3D from "@/components/Molecule3D";
 import ToxicityGauge from "@/components/ToxicityGauge";
@@ -38,268 +50,254 @@ export default function Home() {
   const [smiles, setSmiles] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [history, setHistory] = useState<AnalysisResult[]>([]);
-  const [viewMode, setViewMode] = useState<"2D" | "3D">("3D");
+  const [viewerMode, setViewerMode] = useState<"2D" | "3D">("3D");
   const [sentinelVision, setSentinelVision] = useState(true);
 
   const handleAnalyze = async () => {
-    if (!smiles.trim()) return;
+    if (!smiles) return;
     setIsAnalyzing(true);
+    setResult(null);
     
     try {
       const response = await fetch("https://udaydomadiya-bioaegis-api.hf.space/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ smiles }),
+        body: JSON.stringify({ smiles })
       });
-      
       const data = await response.json();
       if (data.valid) {
         setResult(data);
-        setHistory(prev => [data, ...prev].slice(0, 10));
       } else {
-        alert("Invalid Compound Structure Detect.");
+        alert(data.error || "Neural Engine: Invalid Compound Structure Detect.");
       }
     } catch (err) {
       console.error(err);
-      alert("Cloud Engine Offline. Ensure Hugging Face Space is Running.");
+      alert("Neural Bridge Offline: Unable to connect to the cloud engine.");
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  return (
-    <div className="min-h-screen text-slate-100 selection:bg-emerald-500/30">
-      {/* Dynamic Background */}
-      <div className="fixed inset-0 -z-10 bg-[#0a0b10]" />
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_50%_-20%,#1a2d2a_0%,transparent_50%)]" />
+  const examples = [
+    { name: "Aspirin", smiles: "CC(=O)Oc1ccccc1C(=O)O" },
+    { name: "Caffeine", smiles: "CN1C=NC2=C1C(=O)N(C(=O)N2C)C" },
+    { name: "Sarin", smiles: "CCP(=O)(F)OC(C)C" }
+  ];
 
-      {/* Navigation */}
-      <nav className="border-b border-white/5 bg-black/20 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.4)]">
-              <ShieldAlert className="text-black w-6 h-6" />
+  return (
+    <main className="min-h-screen p-4 md:p-8 flex flex-col gap-6 bg-[#0a0b10] text-slate-100">
+      {/* Premium Header */}
+      <header className="flex items-center justify-between glass-card px-8 py-4 bg-black/20 border border-white/5 rounded-2xl backdrop-blur-xl">
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30">
+              <ShieldAlert className="text-emerald-400 w-6 h-6" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold font-display tracking-tight text-white leading-none">BIOAEGIS <span className="text-emerald-500 text-sm font-medium tracking-widest ml-1 uppercase">X-Alpha</span></h1>
-              <p className="text-[10px] text-emerald-500/60 font-medium tracking-[0.2em] uppercase mt-1">Industrial Toxicity Synthesis</p>
-            </div>
+            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-950 animate-pulse" />
           </div>
-          
-          <div className="flex items-center gap-6 text-sm font-medium text-slate-400">
-            <span className="flex items-center gap-2 text-emerald-400"><Activity className="w-4 h-4" /> Cloud Engine Active</span>
-            <div className="h-4 w-[1px] bg-white/10" />
-            <button className="hover:text-white transition-colors">Documentation</button>
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-white uppercase italic">BioAegis X-Alpha</h1>
+            <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+              <Activity className="w-3 h-3 text-emerald-500" /> System Operational | Node 08-Alpha
+            </div>
           </div>
         </div>
-      </nav>
+        
+        <nav className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest text-slate-400">
+          <a href="#" className="hover:text-emerald-400 transition-all">Intelligence Hub</a>
+          <a href="#" className="hover:text-emerald-400 transition-all">Neural Logs</a>
+          <div className="h-4 w-px bg-white/10" />
+          <div className="flex items-center gap-2 text-emerald-400">
+            <Database className="w-3 h-3" /> API Core Active
+          </div>
+        </nav>
+      </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-12 pb-24">
-        {/* Search Hero */}
-        <section className="max-w-3xl mx-auto mb-16 text-center">
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-4xl md:text-5xl font-bold font-display mb-6 tracking-tight"
-            >
-              Analyze Structural <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Toxicity Risk</span>
-            </motion.h2>
-            <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-slate-400 text-lg mb-10"
-            >
-              Input a SMILES string to perform high-fidelity GNN structural analysis with 3D Sentinel Vision.
-            </motion.p>
-
-            <div className="relative group p-1 rounded-2xl bg-white/5 border border-white/10 focus-within:border-emerald-500/50 transition-all duration-500">
-                <div className="flex items-center gap-3 px-4">
-                    <Search className="text-slate-500 w-5 h-5" />
-                    <input 
-                        type="text" 
-                        value={smiles}
-                        onChange={(e) => setSmiles(e.target.value)}
-                        placeholder="Enter SMILES (e.g. C(C1C(C(C(C(O1)O)O)O)O)O)"
-                        className="flex-1 bg-transparent py-4 text-lg outline-none text-white placeholder:text-slate-600 font-mono"
-                    />
-                    <button 
-                        onClick={handleAnalyze}
-                        disabled={isAnalyzing}
-                        className="bg-emerald-500 hover:bg-emerald-400 disabled:bg-slate-700 text-black px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-[0_4px_20px_rgba(16,185,129,0.3)] active:scale-95"
-                    >
-                        {isAnalyzing ? (
-                            <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                        ) : (
-                            <>Analyze <Zap className="w-4 h-4" /></>
-                        )}
-                    </button>
-                </div>
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 h-full">
+        
+        {/* Left Column: Input & Terminal */}
+        <aside className="lg:col-span-3 flex flex-col gap-6">
+          <section className="glass-card p-6 flex-1 flex flex-col bg-black/20 border border-white/5 rounded-3xl backdrop-blur-xl">
+            <div className="flex items-center gap-2 mb-6 text-emerald-400">
+              <Terminal className="w-5 h-5" />
+              <h2 className="text-sm font-bold uppercase tracking-widest">Neural Console</h2>
             </div>
             
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-                <span className="text-xs text-slate-500 uppercase tracking-widest font-semibold">Try Examples:</span>
-                {["Aspirin", "Caffeine", "Benzo[a]pyrene"].map((name) => (
-                    <button 
-                      key={name}
-                      onClick={() => setSmiles(name === "Aspirin" ? "CC(=O)Oc1ccccc1C(=O)O" : name === "Caffeine" ? "CN1C=NC2=C1C(=O)N(C(=O)N2C)C" : "c1ccc2c(c1)cc3ccc4cccc5c4c3c2cc5")}
-                      className="text-xs px-3 py-1 bg-white/5 border border-white/10 rounded-full hover:border-emerald-500/40 hover:bg-emerald-500/10 transition-all text-slate-400 hover:text-emerald-400"
-                    >
-                      {name}
-                    </button>
-                ))}
-            </div>
-        </section>
+            <div className="space-y-4 flex-1">
+              <div>
+                <label className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2 block">Structural Descriptor (SMILES)</label>
+                <textarea 
+                  value={smiles}
+                  onChange={(e) => setSmiles(e.target.value)}
+                  placeholder="Enter chemical string..."
+                  className="w-full h-32 bg-black/40 border border-white/10 rounded-xl p-4 resize-none font-mono text-sm focus:border-emerald-500/50 outline-none"
+                />
+              </div>
 
-        <AnimatePresence mode="wait">
-        {result && (
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8"
-          >
-            {/* Left: Visualization & XAI */}
-            <div className="lg:col-span-7 space-y-8">
-              <div className="glass-panel rounded-3xl overflow-hidden p-6 min-h-[500px] flex flex-col">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                        {viewMode === "2D" ? <Eye className="text-emerald-400 w-4 h-4" /> : <Box className="text-emerald-400 w-4 h-4" />}
-                    </div>
-                    <h3 className="font-bold text-lg">Structural Visualization</h3>
+              <button 
+                onClick={handleAnalyze}
+                disabled={isAnalyzing}
+                className="w-full bg-emerald-500 hover:bg-emerald-400 text-black py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95"
+              >
+                {isAnalyzing ? (
+                  <motion.div 
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                  >
+                    <Zap className="w-5 h-5" />
+                  </motion.div>
+                ) : (
+                  <>Analyze Compound <ChevronRight className="w-4 h-4" /></>
+                )}
+              </button>
+
+              <div className="pt-6 border-t border-white/5">
+                <span className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-3 block">Structural Templates</span>
+                <div className="flex flex-col gap-2">
+                  {examples.map((ex) => (
+                    <button 
+                      key={ex.name}
+                      onClick={() => setSmiles(ex.smiles)}
+                      className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all text-left group"
+                    >
+                      <span className="text-xs font-bold text-slate-300 group-hover:text-emerald-400">{ex.name}</span>
+                      <Box className="w-3 h-3 text-slate-600 group-hover:text-emerald-500" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 rounded-2xl bg-slate-900 border border-white/5 text-[10px] text-slate-500 font-mono leading-relaxed">
+              <div className="flex items-center gap-2 mb-1 text-emerald-500">
+                 <Cpu className="w-3 h-3" /> GNN Inference
+              </div>
+              Model Accuracy: 94.25% <br/>
+              Dataset: 378k Molecules <br/>
+              Platform: X-Alpha Production
+            </div>
+          </section>
+        </aside>
+
+        {/* Center Column: Visualization */}
+        <div className="lg:col-span-6 flex flex-col gap-6">
+          <section className="glass-card overflow-hidden flex-1 relative flex flex-col bg-black/20 border border-white/5 rounded-3xl backdrop-blur-xl">
+            <div className="absolute top-6 left-6 z-10 flex gap-2">
+              <button 
+                onClick={() => setViewerMode("3D")}
+                className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${viewerMode === "3D" ? 'bg-emerald-500 text-slate-950' : 'bg-white/5 text-slate-400 border border-white/5'}`}
+              >
+                3D Engine
+              </button>
+              <button 
+                onClick={() => setViewerMode("2D")}
+                className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${viewerMode === "2D" ? 'bg-emerald-500 text-slate-950' : 'bg-white/5 text-slate-400 border border-white/5'}`}
+              >
+                2D Schematic
+              </button>
+            </div>
+
+            <AnimatePresence mode="wait">
+              {result ? (
+                <motion.div 
+                  key={viewerMode}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex-1 flex flex-col"
+                >
+                  <div className="flex-1 min-h-[500px] flex items-center justify-center p-8">
+                    {viewerMode === "2D" ? (
+                      <div className="w-full max-w-lg bg-white p-6 rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.05)]">
+                        <MoleculeViewer svg={result.svg || ""} />
+                      </div>
+                    ) : (
+                      <div className="w-full h-full relative">
+                        <Molecule3D pdb={result.pdb || ""} atomScores={sentinelVision ? result.toxicity?.atom_scores : undefined} />
+                      </div>
+                    )}
                   </div>
                   
-                  <div className="flex items-center gap-1 bg-black/40 p-1 rounded-xl border border-white/5">
-                    <button 
-                        onClick={() => setViewMode("2D")}
-                        className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${viewMode === "2D" ? 'bg-emerald-500 text-black shadow-lg' : 'text-slate-400 hover:text-white'}`}
-                    >
-                        2D View
-                    </button>
-                    <button 
-                         onClick={() => setViewMode("3D")}
-                         className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${viewMode === "3D" ? 'bg-emerald-500 text-black shadow-lg' : 'text-slate-400 hover:text-white'}`}
-                    >
-                        3D View
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex-1 relative bg-black/20 rounded-2xl border border-white/5 group overflow-hidden">
-                    {viewMode === "2D" ? (
-                        <div className="w-full h-full flex items-center justify-center p-8 bg-white/95 rounded-2xl contrast-[1.1] saturate-[1.2]">
-                             <MoleculeViewer svg={result.svg || ""} />
-                        </div>
-                    ) : (
-                        <div className="w-full h-full min-h-[450px]">
-                            <Molecule3D pdb={result.pdb || ""} atomScores={sentinelVision ? result.toxicity?.atom_scores : undefined} />
-                        </div>
-                    )}
-                    
-                    {/* Sentinel Vision Overlay */}
-                    <div className="absolute top-4 right-4 flex flex-col gap-2">
-                        <button 
+                  {/* Visual Controls Footer */}
+                  <div className="p-4 border-t border-white/5 flex items-center justify-between bg-slate-950/20">
+                     <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Sentinel Vision</label>
+                          <button 
                             onClick={() => setSentinelVision(!sentinelVision)}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${sentinelVision ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50' : 'bg-black/60 text-slate-500 border-white/10'}`}
-                        >
-                            <Zap className={`w-3 h-3 ${sentinelVision ? 'animate-pulse' : ''}`} />
-                            SENTINEL VISION {sentinelVision ? 'ON' : 'OFF'}
-                        </button>
-                    </div>
-
-                    <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-[10px] text-slate-400 font-mono">
-                        {result.smiles}
-                    </div>
+                            className={`w-8 h-4 rounded-full relative transition-all ${sentinelVision ? 'bg-emerald-500' : 'bg-slate-700'}`}
+                          >
+                            <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${sentinelVision ? 'left-4.5' : 'left-0.5'}`} />
+                          </button>
+                        </div>
+                     </div>
+                     <div className="text-[10px] font-mono text-slate-500 uppercase italic">
+                        Real-time Structural Conformer Generation
+                     </div>
+                  </div>
+                </motion.div>
+              ) : (
+                <div className="flex-1 flex flex-col items-center justify-center p-12 text-center opacity-40">
+                  <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-pulse border border-white/10">
+                    <Globe className="w-12 h-12 text-slate-600" />
+                  </div>
+                  <h3 className="text-xl font-bold italic tracking-tight mb-2 uppercase">Awaiting Compound Analysis</h3>
+                  <p className="text-xs font-medium text-slate-400 max-w-xs leading-relaxed uppercase tracking-tighter">Enter a molecular descriptor in the Neural Console to visualize structural threats.</p>
                 </div>
-              </div>
+              )}
+            </AnimatePresence>
+          </section>
+        </div>
 
-              {/* Physicochemical Radar */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {[
-                    { label: "Mol Wt", value: result.properties?.mol_wt.toFixed(2), icon: Beaker },
-                    { label: "LogP", value: result.properties?.logp.toFixed(2), icon: Activity },
-                    { label: "TPSA", value: result.properties?.tpsa.toFixed(1), icon: FlaskConical },
-                    { label: "H-Donors", value: result.properties?.h_donors, icon: Database }
-                ].map((prop, i) => (
-                    <div key={i} className="glass-panel p-4 rounded-2xl border-white/5 hover:border-emerald-500/30 transition-all">
-                        <prop.icon className="w-4 h-4 text-emerald-500/60 mb-2" />
-                        <div className="text-slate-400 text-xs font-medium uppercase tracking-wider">{prop.label}</div>
-                        <div className="text-white text-xl font-bold font-display">{prop.value}</div>
-                    </div>
-                ))}
-              </div>
+        {/* Right Column: Syndromic Intelligence */}
+        <aside className="lg:col-span-3 flex flex-col gap-6">
+          <section className="glass-card p-6 flex flex-col h-full bg-black/20 border border-white/5 rounded-3xl backdrop-blur-xl">
+            <div className="flex items-center gap-2 mb-6 text-emerald-400">
+              <Layers className="w-5 h-5" />
+              <h2 className="text-sm font-bold uppercase tracking-widest">Intelligence Report</h2>
             </div>
 
-            {/* Right: Toxicity Intelligence */}
-            <div className="lg:col-span-5 space-y-6">
-              <div className="glass-panel rounded-3xl p-8 relative overflow-hidden border-emerald-500/20 bg-emerald-500/[0.02]">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl -mr-16 -mt-16" />
-                
-                <h3 className="font-bold text-xl mb-8 flex items-center gap-2">
-                    <ShieldAlert className="text-emerald-500 w-5 h-5" />
-                    Toxicity Assessment
-                </h3>
+            <AnimatePresence>
+              {result && result.toxicity ? (
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="space-y-6"
+                >
+                  {/* Gauge Section */}
+                  <div className="flex justify-center -mt-4">
+                    <ToxicityGauge percent={result.toxicity.toxicity_percent} />
+                  </div>
 
-                <div className="flex justify-center mb-10">
-                    <ToxicityGauge percent={result.toxicity?.toxicity_percent || 0} />
-                </div>
-
-                <div className="space-y-6">
-                    <div>
-                        <div className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-2">Primary Classification</div>
-                        <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
-                            <span className="text-lg font-bold text-emerald-400 capitalize">{result.toxicity?.toxicity_class}</span>
-                            <span className="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-bold">TOP MATCH</span>
-                        </div>
+                  {/* Classification Card */}
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-2">Dominant Syndrome</div>
+                    <div className="flex items-center justify-between">
+                       <span className="text-xl font-bold text-emerald-400 capitalize italic">{result.toxicity.toxicity_class}</span>
+                       <div className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-bold uppercase tracking-widest border border-emerald-500/20">Certified Match</div>
                     </div>
+                  </div>
 
-                    <div>
-                      <div className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-3 italic flex items-center gap-2">
-                        <Share2 className="w-3 h-3" /> Latent Space Probabilities
-                      </div>
-                      <div className="space-y-3">
-                        {result.toxicity?.top_classes?.slice(0, 3).map((cls, j) => (
-                            <div key={j} className="relative">
-                                <div className="flex justify-between text-xs mb-1 font-medium">
-                                    <span className="text-slate-400">{cls.class}</span>
-                                    <span className="text-slate-300">{(cls.confidence * 100).toFixed(1)}%</span>
-                                </div>
-                                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                                    <motion.div 
-                                      initial={{ width: 0 }}
-                                      animate={{ width: `${cls.confidence * 100}%` }}
-                                      className={`h-full ${j === 0 ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-slate-600'}`}
-                                    />
-                                </div>
-                            </div>
+                  {/* Probabilities */}
+                  <div className="space-y-4">
+                     <span className="text-[10px] uppercase tracking-widest font-bold text-slate-500 block">Neural Path Activation</span>
+                     <div className="space-y-3">
+                        {result.toxicity.top_classes?.slice(0, 3).map((cls, j) => (
+                           <div key={j} className="space-y-1.5">
+                              <div className="flex justify-between text-[10px] font-bold uppercase">
+                                 <span className="text-slate-400">{cls.class}</span>
+                                 <span className="text-slate-200">{(cls.confidence * 100).toFixed(1)}%</span>
+                              </div>
+                              <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                                 <motion.div 
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${cls.confidence * 100}%` }}
+                                    className={`h-full ${j === 0 ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-slate-600 opacity-60'}`}
+                                 />
+                              </div>
+                           </div>
                         ))}
-                      </div>
-                    </div>
-                </div>
-                
-                <div className="mt-10 pt-6 border-t border-white/5 flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-cyan-500/10 flex items-center justify-center flex-shrink-0 border border-cyan-500/20">
-                        <Info className="text-cyan-400 w-4 h-4" />
-                    </div>
-                    <div>
-                        <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">AI Verdict</div>
-                        <p className="text-xs text-slate-400 leading-relaxed italic">
-                            Structural motifs identified in the {result.toxicity?.toxicity_class?.toLowerCase()} cluster signify a {(result.toxicity?.toxicity_percent || 0) > 70 ? 'CRITICAL' : (result.toxicity?.toxicity_percent || 0) > 40 ? 'MODERATE' : 'LOW'} elevation in risk. Sentinel Vision heatmap reflects GNN attribution scores.
-                        </p>
-                    </div>
-                </div>
-              </div>
-
-              {/* Warnings/Advisory */}
-              {(result.toxicity?.toxicity_percent || 0) > 80 && (
-                  <motion.div 
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 flex gap-3 items-center"
-                  >
-                      <AlertTriangle className="text-red-500 w-5 h-5 flex-shrink-0" />
                       <span className="text-sm font-bold text-red-500 font-display uppercase tracking-tight italic">High System Criticality: Immediate structural review recommended.</span>
                   </motion.div>
               )}
