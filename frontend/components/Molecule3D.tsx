@@ -97,11 +97,7 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
         });
     }
 
-    // Set Industrial Zoom Guards: Expanded (0.001 - 10.0) for Deep Structural Discovery
-    if (viewer.setZoomLimits) {
-        viewer.setZoomLimits(0.001, 10.0);
-    }
-
+    // Set Industrial Viewport: Unrestricted Navigation (No Bounds)
     viewer.zoomTo(0.7); // Fit to 70% of viewport for full visibility
     viewer.render();
     setIsLoaded(true);
