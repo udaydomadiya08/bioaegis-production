@@ -212,7 +212,7 @@ export default function Home() {
                             className="h-full bg-gradient-to-r from-[#00f5a0] to-[#00d2ff]"
                           />
                        </div>
-                       <span className="text-5xl font-black italic text-white">{result.overall_percent.toFixed(2)}%</span>
+                       <span className="text-5xl font-black italic text-white">{result.overall_percent?.toFixed(2) || "0.00"}%</span>
                     </div>
 
                      <div className="mt-20 flex items-center gap-12 text-[#00f5a0] bg-[#00f5a0]/10 px-12 py-4 rounded-3xl border-2 border-[#00f5a0]/30 shadow-2xl">
@@ -253,7 +253,7 @@ export default function Home() {
                                  <div className="flex items-center justify-between mb-8">
                                     <span className="text-sm font-black uppercase text-white/40 tracking-wider truncate mr-4">{name}</span>
                                     <div className="flex flex-col items-end leading-none">
-                                       <span className={`text-xl font-black italic ${isToxic ? 'text-[#ff4b4b]' : 'text-[#00f5a0]'}`}>{value.toFixed(1)}%</span>
+                                       <span className={`text-xl font-black italic ${isToxic ? 'text-[#ff4b4b]' : 'text-[#00f5a0]'}`}>{value?.toFixed(1) || "0.0"}%</span>
                                        <span className="text-[10px] font-black text-[#facc15] uppercase tracking-tighter">Limit: {threshold}%</span>
                                     </div>
                                  </div>
@@ -315,9 +315,9 @@ export default function Home() {
                   
                   <div className="grid grid-cols-1 gap-12">
                      {[
-                       { l: "LogP Value", v: result.properties?.logp.toFixed(2), i: Activity, c: "#00f5a0", t: "Hydrophobicity" },
-                       { l: "TPSA Index", v: result.properties?.tpsa.toFixed(1), i: Layers, c: "#00d2ff", t: "Polarity" },
-                       { l: "Atomic Weight", v: result.properties?.mol_wt.toFixed(1), i: Zap, c: "#facc15", t: "Mass Calculation" },
+                       { l: "LogP Value", v: result.properties?.logp?.toFixed(2) || "0.00", i: Activity, c: "#00f5a0", t: "Hydrophobicity" },
+                       { l: "TPSA Index", v: result.properties?.tpsa?.toFixed(1) || "0.0", i: Layers, c: "#00d2ff", t: "Polarity" },
+                       { l: "Atomic Weight", v: result.properties?.mol_wt?.toFixed(1) || "0.0", i: Zap, c: "#facc15", t: "Mass Calculation" },
                        { l: "Heavy Atoms", v: result.properties?.heavy_atoms, i: Box, c: "#a855f7", t: "Structural Index" }
                      ].map((p, i) => (
                        <div key={i} className="command-card !p-12 group border-4 border-white/5 hover:border-[#00f5a0] transition-all flex flex-row items-center gap-12 bg-[#0b0e14] shadow-4xl">
