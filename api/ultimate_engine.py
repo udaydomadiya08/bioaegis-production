@@ -22,7 +22,7 @@ class UltimateEngine:
         if not models_dir:
             models_dir = os.path.join(base_dir, "models")
             
-        self.model_path = os.path.join(models_dir, "ultimate_bioaegis_ensemble.pth")
+        self.model_path = os.path.join(models_dir, "ultimate_bioaegis_ensemble.bin")
         self.label_map_path = os.path.join(models_dir, "label_map.pkl")
 
         # 2. Local Detection & Forensic Diagnostics
@@ -43,7 +43,7 @@ class UltimateEngine:
             self.repo_id = "UDAYDOMADIYA/bioaegis-weights"
             try:
                 from huggingface_hub import hf_hub_download
-                self.model_path = hf_hub_download(repo_id=self.repo_id, filename="ultimate_bioaegis_ensemble.pth")
+                self.model_path = hf_hub_download(repo_id=self.repo_id, filename="ultimate_bioaegis_ensemble.bin")
                 self.label_map_path = hf_hub_download(repo_id=self.repo_id, filename="label_map.pkl")
                 print("✅ Cloud Weights Synchronized.")
             except Exception as e:
