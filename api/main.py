@@ -18,7 +18,7 @@ app.add_middleware(
 )
 
 # Initialize Ultimate Engine (Global singleton)
-engine = UltimateEngine(models_dir=os.path.join(os.getcwd(), "models"))
+engine = UltimateEngine()
 
 class PredictionRequest(BaseModel):
     smiles: str
