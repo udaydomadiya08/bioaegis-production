@@ -31,9 +31,18 @@ import ToxicityGauge from "@/components/ToxicityGauge";
 interface AnalysisResult {
   smiles: string;
   valid: boolean;
-  overall_toxicity_index: number;
+  overall_toxicity_index: string;
   overall_percent: number;
   expert_profiling: Record<string, number>;
+  expert_diagnostics: Record<string, {
+    status: string;
+    threshold_percent: number;
+    passed: boolean;
+  }>;
+  safety_clearances: string[];
+  primary_hazard: string;
+  hazard_confidence: number;
+  classification: string;
   properties?: {
     mol_wt: number;
     logp: number;
@@ -45,7 +54,10 @@ interface AnalysisResult {
   svg?: string;
   pdb?: string;
   error?: string;
-  atom_scores?: number[];
+  explanation: {
+    atom_scores: number[];
+    smiles: string;
+  };
 }
 
 export default function Home() {
