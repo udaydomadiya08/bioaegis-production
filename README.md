@@ -1,3 +1,12 @@
+---
+title: BioAegis X-Alpha
+emoji: 🧪
+colorFrom: green
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
 # 🛰️ BioAegis X-Alpha: 13-Expert Toxicity Ensemble
 
 [![Vercel Deployment](https://img.shields.io/badge/Deployment-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://bioaegis-production.vercel.app/)
