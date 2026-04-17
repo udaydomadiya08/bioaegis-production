@@ -14,12 +14,26 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
   const containerRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  
+  // Interaction & Animation State
+  const autoRotateRef = useRef<boolean>(true);
+  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
     // Dynamically load 3Dmol.js from CDN
     if (typeof window === "undefined") return;
+    
+    const handleInteraction = () => {
+      autoRotateRef.current = false;
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = setTimeout(() => {
+        autoRotateRef.current = true;
+      }, 3000);
+    };
+
     if ((window as any).$3Dmol) {
-        initViewer();
+        initViewer(handleInteraction);
         return;
     }
 
@@ -28,23 +42,30 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
     script.async = true;
     script.onload = () => {
       if (containerRef.current && pdb) {
-        initViewer();
+        initViewer(handleInteraction);
       }
     };
     document.head.appendChild(script);
 
     return () => {
-      // document.head.removeChild(script); // Keep script if navigating back
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
     };
   }, []);
 
   useEffect(() => {
     if (pdb && (window as any).$3Dmol) {
-      initViewer();
+      initViewer(() => {
+        autoRotateRef.current = false;
+        if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+        idleTimerRef.current = setTimeout(() => {
+          autoRotateRef.current = true;
+        }, 3000);
+      });
     }
-  }, [pdb, sentinelVision]); // Added sentinelVision as dependency
+  }, [pdb, sentinelVision]);
 
-  const initViewer = () => {
+  const initViewer = (onInteract: () => void) => {
     const $3Dmol = (window as any).$3Dmol;
     if (!$3Dmol || !containerRef.current) return;
 
@@ -56,24 +77,19 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
     });
     
     viewerRef.current = viewer;
-    
     viewer.addModel(pdb, "pdb");
     
     if (sentinelVision) {
-        // High-End Toxicity Heatmap: Atoms with high B-factors (hot zones) go Crimson
         const gradientScheme = { prop: 'b', gradient: 'rwb', min: 0.1, max: 0.8 };
         viewer.setStyle({}, { 
             stick: { colorscheme: gradientScheme, radius: 0.2 },
             sphere: { colorscheme: gradientScheme, scale: 0.3 }
         });
-        
-        // Add a "Risk Surface" that glows based on toxicity attribution
         viewer.addSurface($3Dmol.SurfaceType.VDW, {
             opacity: 0.4,
             colorscheme: gradientScheme
         });
     } else {
-        // Standard Lab View
         viewer.setStyle({}, { stick: { radius: 0.15 }, sphere: { scale: 0.25 } });
         viewer.addSurface($3Dmol.SurfaceType.VDW, {
             opacity: 0.2,
@@ -81,14 +97,43 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
         });
     }
 
+    // Set Industrial Zoom Guards
+    // Most versions support setZoomLimits, otherwise we handle via event
+    if (viewer.setZoomLimits) {
+        viewer.setZoomLimits(0.4, 3.5);
+    }
+
     viewer.zoomTo();
     viewer.render();
     setIsLoaded(true);
+
+    // Bind Interaction Shield
+    const canvas = containerRef.current.querySelector('canvas');
+    if (canvas) {
+        ['mousedown', 'wheel', 'touchstart', 'mousemove'].forEach(evt => {
+            canvas.addEventListener(evt, onInteract, { passive: true });
+        });
+    }
+
+    // Launch Harmonic Auto-Rotation Loop
+    const animate = () => {
+        if (autoRotateRef.current && viewerRef.current) {
+            // Smooth randomized orbital movement
+            viewerRef.current.rotate(0.3, 'y');
+            viewerRef.current.rotate(0.1, 'x');
+            viewerRef.current.render();
+        }
+        animationFrameRef.current = requestAnimationFrame(animate);
+    };
+    
+    if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+    animationFrameRef.current = requestAnimationFrame(animate);
   };
 
   const handleReset = () => {
     if (viewerRef.current) {
       viewerRef.current.zoomTo();
+      autoRotateRef.current = true;
     }
   };
 
@@ -108,7 +153,6 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
         className={`w-full h-[400px] transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} 
       />
 
-      {/* 3D Controls Overlay */}
       <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <button 
           onClick={handleReset}
@@ -127,7 +171,9 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
 
       <div className="absolute bottom-4 left-4 flex gap-2 items-center">
         <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_#00ffcc]" />
-        <span className="text-[10px] uppercase tracking-widest text-primary/80 font-mono font-bold">Interactive 3D Engine Active</span>
+        <span className="text-[10px] uppercase tracking-widest text-primary/80 font-mono font-bold">
+            {isLoaded && autoRotateRef.current ? "Orbital Auto-Discovery Active" : "Tactical Manual Audit Active"}
+        </span>
       </div>
     </div>
   );
