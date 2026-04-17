@@ -20,12 +20,14 @@ const ToxicityGauge: React.FC<ToxicityGaugeProps> = ({ percent }) => {
     return '#10b981'; // Safe Emerald
   };
 
+  const color = getColor(percent);
+
   return (
     <div className="relative flex items-center justify-center w-60 h-60">
       {/* Outer Glow Ring */}
       <div 
         className="absolute inset-0 rounded-full opacity-10 blur-2xl transition-all duration-1000"
-        style={{ backgroundColor: getColor(percent) }}
+        style={{ backgroundColor: color }}
       />
       
       <svg
@@ -34,36 +36,48 @@ const ToxicityGauge: React.FC<ToxicityGaugeProps> = ({ percent }) => {
         className="transform -rotate-90 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]"
       >
         {/* Background Track */}
-            strokeLinecap="round"
-            style={{ filter: `drop-shadow(0 0 8px ${color}88)` }}
-          />
-        </svg>
+        <circle
+          stroke="rgba(255,255,255,0.05)"
+          fill="transparent"
+          strokeWidth={stroke}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+        />
         
-        {/* Percentage Text */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <motion.span 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold font-mono tracking-tighter"
-            style={{ color }}
-          >
-            {value.toFixed(1)}%
-          </motion.span>
-          <span className="text-[10px] uppercase text-white/40 tracking-[0.2em] font-medium">Toxicity</span>
-        </div>
-      </div>
-      
-      <div className="text-center">
-        <p className="text-lg font-bold tracking-wide uppercase text-white/90">{label}</p>
-        <div className="flex justify-center gap-1 mt-2">
-            {[...Array(5)].map((_, i) => (
-                <div 
-                    key={i} 
-                    className={`h-1 w-4 rounded-full transition-colors duration-500 ${i < (value/20) ? 'bg-primary' : 'bg-white/10'}`} 
-                />
-            ))}
-        </div>
+        {/* Progress Arc */}
+        <motion.circle
+          stroke={color}
+          fill="transparent"
+          strokeWidth={stroke}
+          strokeDasharray={circumference + ' ' + circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          strokeLinecap="round"
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+          style={{ filter: `drop-shadow(0 0 5px ${color})` }}
+        />
+      </svg>
+
+      {/* Probability Readout */}
+      <div className="absolute flex flex-col items-center">
+        <motion.span 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-4xl font-bold tracking-tighter"
+          style={{ color }}
+        >
+          {percent.toFixed(1)}%
+        </motion.span>
+        <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">
+          Threat Index
+        </span>
       </div>
     </div>
   );
-}
+};
+
+export default ToxicityGauge;
