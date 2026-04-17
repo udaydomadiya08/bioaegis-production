@@ -32,8 +32,11 @@ graph TD
     D --> I
 ```
 
-### **1. Neural Core**
-The GNN architecture utilizes a shared-backbone feature extractor with 13 specialized heads. Trained on **378k+ clinical data points**, the engine achieves a **94.25% validation accuracy** through rigorous statistical calibration.
+### **1. Neural Core & Startup Protocol**
+The GNN architecture utilizes a shared-backbone feature extractor with 13 specialized heads. The engine incorporates a **FastAPI Lifespan Protocol** to ensure the neural core is fully reconstituted (from ASCII or Cloud Hub) and the ROC-J threshold matrix is locked before the gateway opens.
+
+> [!IMPORTANT]
+> **HuggingFace Synchronization**: The backend performs a forensic weight audit on boot. If local binaries are missing, it automatically triggers a cloud sync via the `huggingface_hub` to maintain industrial uptime.
 
 ### **2. Statistical Pass**
 Each expert is linked to a hardened decision matrix derived from ROC analysis of the master pharmacological dataset. This eliminates heuristic bias and ensures a statistically absolute "Pass/Toxic" boundary.

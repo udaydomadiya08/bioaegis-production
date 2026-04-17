@@ -6,9 +6,31 @@ from api.utils.chem import get_molecule_summary, validate_smiles
 from api.utils.chem_3d import get_3d_data
 import os
 
-app = FastAPI(title="Vantix BioAegis API", version="3.0.0-ULTIMATE")
+from contextlib import asynccontextmanager
 
-# Enable CORS for frontend integration
+# Initialize Global engine reference
+engine = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Reconstitute Neural Core and Lock In Thresholds
+    global engine
+    print("🛰️ BioAegis X-Alpha: Initializing Command Startup Protocol...")
+    try:
+        engine = UltimateEngine()
+        print("✅ BioAegis X-Alpha: Operational Sync Complete.")
+    except Exception as e:
+        print(f"❌ BioAegis X-Alpha: Critical Startup Failure: {e}")
+    yield
+    # Shutdown: Clean up resources if needed
+    print("🛰️ BioAegis X-Alpha: Offline.")
+
+app = FastAPI(
+    title="Vantix BioAegis API", 
+    version="3.0.0-ULTIMATE",
+    lifespan=lifespan
+)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,9 +38,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Initialize Ultimate Engine (Global singleton)
-engine = UltimateEngine()
 
 class PredictionRequest(BaseModel):
     smiles: str
