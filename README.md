@@ -14,3 +14,4 @@ It utilizes a Triple-Fusion GNN architecture trained on 378k molecules with 94.2
 
 ### 🧬 Sentinel Vision XAI
 Included is a gradient-based saliency engine for 3D structural attribution mapping.
+ 
