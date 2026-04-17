@@ -97,10 +97,9 @@ export default function Molecule3D({ pdb, isAnalyzing, sentinelVision }: Molecul
         });
     }
 
-    // Set Industrial Zoom Guards
-    // Most versions support setZoomLimits, otherwise we handle via event
+    // Set Industrial Zoom Guards: Expanded (0.1 - 5.0) for Full Envelope Visibility
     if (viewer.setZoomLimits) {
-        viewer.setZoomLimits(0.4, 3.5);
+        viewer.setZoomLimits(0.1, 5.0);
     }
 
     viewer.zoomTo();

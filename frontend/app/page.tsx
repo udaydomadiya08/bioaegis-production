@@ -244,32 +244,40 @@ export default function Home() {
                      
                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {Object.entries(result.expert_profiling || {}).map(([name, value], idx) => {
-                           const diagnostic = result.expert_diagnostics[name];
+                           const diagnostic = result.expert_diagnostics?.[name];
                            const threshold = diagnostic?.threshold_percent || 50;
                            const isToxic = !diagnostic?.passed;
 
                            return (
-                              <div key={idx} className={`command-card !p-12 border-2 ${isToxic ? 'border-[#ff4b4b]/30 bg-[#ff4b4b]/5' : 'border-white/5 bg-[#0b0e14]/50'} group hover:border-[#00f5a0]/60 transition-all`}>
+                              <div key={idx} className={`command-card !p-12 border-2 ${isToxic ? 'border-[#ff4b4b]/50 bg-[#ff4b4b]/5' : 'border-[#00f5a0]/30 bg-[#0b0e14]/50'} group hover:border-[#00f5a0] transition-all relative overflow-hidden`}>
                                  <div className="flex items-center justify-between mb-8">
-                                    <span className="text-sm font-black uppercase text-white/40 tracking-wider truncate mr-4">{name}</span>
-                                    <div className="flex flex-col items-end leading-none">
-                                       <span className={`text-xl font-black italic ${isToxic ? 'text-[#ff4b4b]' : 'text-[#00f5a0]'}`}>{value?.toFixed(1) || "0.0"}%</span>
-                                       <span className="text-[10px] font-black text-[#facc15] uppercase tracking-tighter">Limit: {threshold}%</span>
+                                    <div className="flex flex-col">
+                                       <span className="text-[10px] font-black uppercase text-white/30 tracking-widest mb-1">Vector Head</span>
+                                       <span className="text-base font-black uppercase text-white tracking-wider truncate mr-4">{name}</span>
+                                    </div>
+                                    <div className={`px-4 py-1 rounded-md text-[10px] font-black uppercase ${isToxic ? 'bg-[#ff4b4b] text-white' : 'bg-[#00f5a0] text-[#0b0e14]'}`}>
+                                       {isToxic ? 'TOXIC' : 'NON-TOXIC'}
                                     </div>
                                  </div>
-                                 <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden relative">
+                                 
+                                 <div className="flex items-end justify-between mt-12 mb-6">
+                                    <div className="flex flex-col">
+                                       <span className="text-[10px] font-black text-[#facc15] uppercase tracking-tighter">Threshold: {threshold}%</span>
+                                       <span className={`text-2xl font-black italic leading-none ${isToxic ? 'text-[#ff4b4b]' : 'text-[#00f5a0]'}`}>{value?.toFixed(2) || "0.00"}%</span>
+                                    </div>
+                                    <span className="text-[10px] font-black text-white/20 uppercase">Confidence Check</span>
+                                 </div>
+
+                                 <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden relative">
                                     <motion.div 
                                        initial={{ width: 0 }}
                                        animate={{ width: `${value}%` }}
-                                       className={`h-full ${isToxic ? 'bg-[#ff4b4b]' : 'bg-[#00f5a0]'}`}
+                                       className={`h-full ${isToxic ? 'bg-gradient-to-r from-[#ff4b4b] to-[#ff0000]' : 'bg-gradient-to-r from-[#00f5a0] to-[#00d2ff]'}`}
                                     />
                                     <div 
-                                       className="absolute top-0 h-full w-1 bg-[#facc15] z-10"
+                                       className="absolute top-0 h-full w-1 bg-white/40 z-10"
                                        style={{ left: `${threshold}%` }}
                                     />
-                                 </div>
-                                 <div className={`mt-4 text-[10px] font-black uppercase tracking-widest ${isToxic ? 'text-[#ff4b4b]' : 'text-[#00f5a0]'}`}>
-                                    Status: {diagnostic?.status}
                                  </div>
                               </div>
                            );
