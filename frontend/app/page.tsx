@@ -223,7 +223,7 @@ export default function Home() {
                         <Zap className="w-10 h-10" />
                         <div className="flex flex-col">
                            <span className="text-xs font-black uppercase opacity-60">Primary Hazard Detected</span>
-                           <span className="text-2xl font-black uppercase italic tracking-normal">{result.primary_hazard.class} ({result.primary_hazard.confidence.toFixed(2)}%)</span>
+                           <span className="text-2xl font-black uppercase italic tracking-normal">{result.primary_hazard} ({result.hazard_confidence}%)</span>
                         </div>
                      </div>
                   </div>
