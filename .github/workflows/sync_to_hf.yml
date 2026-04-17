@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
       - name: Install Hugging Face Hub
         run: pip install huggingface_hub
       - name: Sync to Hugging Face Hub
