@@ -343,13 +343,13 @@ export default function Home() {
                         </div>
                         <p className="text-3xl text-white/50 leading-relaxed italic font-black tracking-normal">
                            BioAegis 13-Expert analysis of the provided SMILES string indicates a dominant 
-                           <span className="text-[#ff4b4b] mx-2 uppercase font-black">{result.primary_hazard.class}</span> 
+                           <span className="text-[#ff4b4b] mx-2 uppercase font-black">{result.primary_hazard}</span> 
                            risk with an overall toxicity index of 
-                           <span className="text-white mx-4 underline decoration-[#00f5a0]/80 underline-offset-8">{result.overall_toxicity_index.toFixed(4)}</span>.
+                           <span className="text-white mx-4 underline decoration-[#00f5a0]/80 underline-offset-8">{result.overall_toxicity_index}</span>.
                         </p>
                         <div className="mt-8 border-t border-white/10 pt-12">
                            <div className="text-xs font-black uppercase text-white/30 italic">Primary Risk Confidence</div>
-                           <div className="text-4xl font-black text-[#ff4b4b] italic">{result.primary_hazard.confidence.toFixed(2)}%</div>
+                           <div className="text-4xl font-black text-[#ff4b4b] italic">{result.hazard_confidence}%</div>
                         </div>
                      </div>
                   </div>
