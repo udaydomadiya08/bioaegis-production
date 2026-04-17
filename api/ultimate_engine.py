@@ -190,7 +190,31 @@ class UltimateEngine:
             atom_scores = torch.norm(x.grad, dim=1)
             atom_scores = (atom_scores - atom_scores.min()) / (atom_scores.max() - atom_scores.min() + 1e-6)
             
+            # 6. Molecular Properties & visualization Support
+            from rdkit.Chem import Descriptors, AllChem, rdDepictor
+            from rdkit.Chem.Draw import rdMolDraw2D
+            
+            mol = Chem.MolFromSmiles(smiles)
+            mol_wt = Descriptors.MolWt(mol)
+            logp = Descriptors.MolLogP(mol)
+            tpsa = Descriptors.TPSA(mol)
+            h_donors = Descriptors.NumHDonors(mol)
+            h_acceptors = Descriptors.NumHAcceptors(mol)
+            heavy_atoms = mol.GetNumHeavyAtoms()
+            
+            # SVG Generation
+            drawer = rdMolDraw2D.MolDraw2DSVG(400, 400)
+            rdMolDraw2D.PrepareAndDrawMolecule(drawer, mol)
+            drawer.FinishDrawing()
+            svg = drawer.GetDrawingText()
+            
+            # PDB for 3D View
+            mol_3d = Chem.AddHs(mol)
+            AllChem.EmbedMolecule(mol_3d, AllChem.ETKDG())
+            pdb = Chem.MolToPDBBlock(mol_3d)
+            
             return {
+                "valid": True,
                 "overall_toxicity_index": f"{oti:.4f}",
                 "overall_percent": round(probs.max().item() * 100, 2),
                 "expert_profiling": expert_results,
@@ -199,13 +223,20 @@ class UltimateEngine:
                 "primary_hazard": primary_hazard,
                 "hazard_confidence": round(probs.max().item() * 100, 1),
                 "classification": classification,
+                "properties": {
+                    "mol_wt": mol_wt,
+                    "logp": logp,
+                    "tpsa": tpsa,
+                    "h_donors": h_donors,
+                    "h_acceptors": h_acceptors,
+                    "heavy_atoms": heavy_atoms
+                },
+                "svg": svg,
+                "pdb": pdb,
                 "explanation": {
                     "atom_scores": atom_scores.tolist(),
                     "smiles": smiles
                 }
             }
         except Exception as e:
-            print(f"Ultimate Inference Error: {e}")
-            import traceback
-            traceback.print_exc()
-            return None
+            return {"valid": False, "error": str(e)}
