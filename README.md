@@ -1,3 +1,12 @@
+---
+title: BioAegis X-Alpha API
+emoji: 🧪
+colorFrom: green
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
 # 🛰️ BioAegis X-Alpha: Molecular Toxicity Inference Engine
 
 [![Live Node](https://img.shields.io/badge/Status-Operational-00f5a0?style=for-the-badge&logo=vercel)](https://bioaegis-production.vercel.app/)
