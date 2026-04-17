@@ -7,12 +7,13 @@ sdk: docker
 pinned: false
 ---
 
-# 🛰️ BioAegis X-Alpha: Molecular Toxicity Inference Engine
+# 🛰️ BioAegis X-Alpha: 13-Expert Toxicity Ensemble
 
-[![Live Node](https://img.shields.io/badge/Status-Operational-00f5a0?style=for-the-badge&logo=vercel)](https://bioaegis-production.vercel.app/)
-[![Model Cluster](https://img.shields.io/badge/Model-GNN--PRO--08-blue?style=for-the-badge&logo=pytorch)](https://huggingface.co/spaces/UDAYDOMADIYA/bioaegis-api)
+**Industrial-grade drug toxicity profiling through a high-precision ensemble of 13 independent GNN binary classifiers.**
 
-### **BioAegis X-Alpha** is an elite, industrial-grade bioinformatics platform designed for high-fidelity molecular toxicity prediction. By orchestrating a **Triple-Fusion Graph Neural Network (GNN)** architecture, it provides rapid, atom-wise structural attribution heatmaps for pharmacological threat detection.
+BioAegis X-Alpha is a state-of-the-art bioinformatics platform. Optimized for the **Operation Multi-Head** synthesis, it orchestrates a **shared-backbone GNN architecture** to provide granular risk profiling across 13 distinct biological vectors, alongside a mathematically rigorous **Overall Toxicity Index (1.0000 - 10.0000).**
+
+### **The Platform** is an elite diagnostic node designed for high-fidelity molecular threat detection. By utilizing an autonomous ensemble of 13 molecular specialists, it provides rapid, atom-wise structural attribution heatmaps for pharmaceutical safety.
 
 ---
 

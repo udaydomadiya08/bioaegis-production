@@ -31,13 +31,9 @@ import ToxicityGauge from "@/components/ToxicityGauge";
 interface AnalysisResult {
   smiles: string;
   valid: boolean;
-  toxicity?: {
-    toxicity_percent: number;
-    toxicity_class: string;
-    confidence: number;
-    top_classes?: Array<{ class: string; confidence: number }>;
-    atom_scores?: number[];
-  };
+  overall_toxicity_index: number;
+  overall_percent: number;
+  expert_profiling: Record<string, number>;
   properties?: {
     mol_wt: number;
     logp: number;
@@ -49,6 +45,7 @@ interface AnalysisResult {
   svg?: string;
   pdb?: string;
   error?: string;
+  atom_scores?: number[];
 }
 
 export default function Home() {
@@ -178,54 +175,103 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               className="grid grid-cols-1 lg:grid-cols-12 gap-24 pt-20"
             >
-              <div className="lg:col-span-12 xl:col-span-8 space-y-16">
-                 <div className="flex items-center justify-between px-12">
-                    <div className="flex items-center gap-12 text-[#00f5a0]">
-                       <Atom className="w-16 h-16 animate-spin-slow" />
-                       <h3 className="text-5xl font-black uppercase italic leading-none tracking-normal">GNN Structural Attribution</h3>
+              <div className="lg:col-span-12 xl:col-span-8 space-y-24">
+                 
+                 {/* MASSIVE HERO: OVERALL TOXICITY INDEX */}
+                 <div className="command-card flex flex-col items-center justify-center py-32 bg-[#0b0e14] border-4 border-[#00f5a0]/40 relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-full h-2 bg-[#00f5a0]/20" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#00f5a0]/5 to-transparent pointer-events-none" />
+                    
+                    <span className="text-3xl font-black uppercase text-white/40 mb-8 tracking-[0.5em] italic">Overall Toxicity Index</span>
+                    
+                    <div className="relative">
+                       <div className="text-[18rem] font-black italic text-white leading-none tracking-tighter drop-shadow-[0_0_120px_rgba(0,245,160,0.3)]">
+                          {result.overall_toxicity_index.toFixed(4)}
+                       </div>
+                       <div className="absolute -right-24 bottom-12 text-6xl font-black text-[#00f5a0] italic">/ 10.0</div>
+                    </div>
+
+                    <div className="flex items-center gap-16 mt-12">
+                       <div className="h-4 w-96 bg-white/10 rounded-full overflow-hidden border border-white/5">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${result.overall_percent}%` }}
+                            className="h-full bg-gradient-to-r from-[#00f5a0] to-[#00d2ff]"
+                          />
+                       </div>
+                       <span className="text-5xl font-black italic text-white">{result.overall_percent.toFixed(2)}%</span>
+                    </div>
+
+                    <div className="mt-20 flex items-center gap-12 text-[#00f5a0] bg-[#00f5a0]/10 px-12 py-4 rounded-3xl border-2 border-[#00f5a0]/30 shadow-2xl">
+                       <ShieldAlert className="w-10 h-10" />
+                       <span className="text-3xl font-black uppercase italic tracking-normal">Status: {result.overall_toxicity_index > 5 ? 'High Risk' : 'Standard'}</span>
                     </div>
                  </div>
-                 <div className="command-card relative h-[500px] overflow-hidden !p-0 border-4 border-white/20 shadow-none">
-                    <Molecule3D pdb={result.pdb || ""} atomScores={result.toxicity?.atom_scores} />
-                    <div className="absolute bottom-10 left-10 z-20 bg-[#0d1117]/95 px-10 py-6 rounded-3xl border-2 border-[#00f5a0]/60 flex items-center gap-8 shadow-2xl">
-                       <Target className="w-10 h-10 text-[#00f5a0]" />
-                       <div className="flex flex-col gap-1">
-                          <span className="text-xs font-black uppercase text-white/40">Diagnostic Sync</span>
-                          <span className="text-xl font-black uppercase text-white italic">Atom Heatmap</span>
-                       </div>
+
+                 {/* 13-EXPERT MATRIX GRID */}
+                 <div className="space-y-12">
+                    <div className="flex items-center gap-12 text-white/40 px-8">
+                       <Binary className="w-10 h-10" />
+                       <h4 className="text-3xl font-black uppercase italic tracking-widest">Ensemble Expert Profiling (13 Vectors)</h4>
                     </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                       {Object.entries(result.expert_profiling).map(([name, value], idx) => (
+                          <div key={idx} className="command-card !p-12 border-2 border-white/5 bg-[#0b0e14]/50 group hover:border-[#00f5a0]/60 transition-all">
+                             <div className="flex items-center justify-between mb-8">
+                                <span className="text-sm font-black uppercase text-white/40 tracking-wider truncate mr-4">{name}</span>
+                                <span className={`text-xl font-black italic ${value > 50 ? 'text-[#ff4b4b]' : 'text-[#00f5a0]'}`}>{value.toFixed(1)}%</span>
+                             </div>
+                             <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                                <motion.div 
+                                   initial={{ width: 0 }}
+                                   animate={{ width: `${value}%` }}
+                                   className={`h-full ${value > 50 ? 'bg-[#ff4b4b]' : 'bg-[#00f5a0]'}`}
+                                />
+                             </div>
+                          </div>
+                       ))}
+                    </div>
+                 </div>
+
+                 {/* Structural Viewer Section */}
+                 <div className="space-y-12">
+                   <div className="flex items-center gap-12 text-[#00f5a0] px-8">
+                      <Atom className="w-12 h-12 animate-spin-slow" />
+                      <h3 className="text-4xl font-black uppercase italic leading-none tracking-normal">GNN Structural Attribution</h3>
+                   </div>
+                   <div className="command-card relative h-[600px] overflow-hidden !p-0 border-4 border-white/20">
+                      <Molecule3D pdb={result.pdb || ""} atomScores={result.atom_scores} />
+                      <div className="absolute bottom-10 left-10 z-20 bg-[#0d1117]/95 px-10 py-6 rounded-3xl border-2 border-[#00f5a0]/60 flex items-center gap-8 shadow-2xl">
+                         <Target className="w-10 h-10 text-[#00f5a0]" />
+                         <div className="flex flex-col gap-1">
+                            <span className="text-xs font-black uppercase text-white/40">Diagnostic Sync</span>
+                            <span className="text-xl font-black uppercase text-white italic">Atom Heatmap</span>
+                         </div>
+                      </div>
+                   </div>
                  </div>
               </div>
 
-              {/* Information Deck */}
+              {/* Information Deck (Right Column) */}
               <div className="lg:col-span-12 xl:col-span-4 space-y-24">
                  
-                 <section className="command-card p-24 flex flex-col items-center justify-center bg-[#0b0e14] border-4 border-[#00f5a0]/40">
-                    <ToxicityGauge percent={result.toxicity?.toxicity_percent || 0} />
-                    <div className="mt-20 text-center space-y-10 pt-16 border-t-4 border-white/10 w-full">
-                       <span className="text-2xl font-black uppercase text-white/40 block tracking-normal">Predicted Multi-Class Hazard</span>
-                       <div className="text-7xl font-black text-white italic uppercase leading-none underline decoration-[#00f5a0]/50 decoration-8 underline-offset-[20px]">{result.toxicity?.toxicity_class}</div>
-                    </div>
-                 </section>
-
-                 {/* Property Grid - REFACTORED FOR PERFECT HORIZONTAL SYNC */}
+                 {/* Property Grid */}
                  <div className="grid grid-cols-1 gap-12">
                     {[
                       { l: "LogP Value", v: result.properties?.logp.toFixed(2), i: Activity, c: "#00f5a0", t: "Hydrophobicity" },
                       { l: "TPSA Index", v: result.properties?.tpsa.toFixed(1), i: Layers, c: "#00d2ff", t: "Polarity" },
                       { l: "Atomic Weight", v: result.properties?.mol_wt.toFixed(1), i: Zap, c: "#facc15", t: "Mass Calculation" },
-                      { l: "H-Donors", v: result.properties?.h_donors, i: Database, c: "#f472b6", t: "Binding Index" }
+                      { l: "Heavy Atoms", v: result.properties?.heavy_atoms, i: Box, c: "#a855f7", t: "Structural Index" }
                     ].map((p, i) => (
-                      <div key={i} className="command-card !p-16 group border-4 border-white/5 hover:border-[#00f5a0] transition-all flex flex-row items-center gap-16 bg-[#0b0e14] shadow-4xl">
-                         {/* MASSIVE ICON ON LEFT */}
-                         <div className="w-36 h-36 rounded-[2.5rem] bg-white/5 flex items-center justify-center border-2 border-white/10 group-hover:bg-[#00f5a0]/15 transition-all shadow-inner shrink-0 leading-none">
-                            <p.i style={{ color: p.c }} className="w-24 h-24" />
+                      <div key={i} className="command-card !p-12 group border-4 border-white/5 hover:border-[#00f5a0] transition-all flex flex-row items-center gap-12 bg-[#0b0e14] shadow-4xl">
+                         <div className="w-28 h-28 rounded-3xl bg-white/5 flex items-center justify-center border-2 border-white/10 group-hover:bg-[#00f5a0]/15 transition-all shrink-0">
+                            <p.i style={{ color: p.c }} className="w-14 h-14" />
                          </div>
-                         {/* TEXT BLOCK ON RIGHT - PERFECTLY SYNCED */}
-                         <div className="flex flex-col gap-6 text-left"> 
-                            <div className="text-3xl font-black uppercase text-white/40 leading-none tracking-normal italic">{p.l}</div>
-                            <div className="text-8xl font-black text-white italic leading-none tracking-normal">{p.v}</div>
-                            <div className="text-xl font-black uppercase text-[#00f5a0] bg-[#00f5a0]/10 px-8 py-3 rounded-xl inline-block mt-4 self-start tracking-normal">
+                         <div className="flex flex-col gap-2 text-left"> 
+                            <div className="text-xl font-black uppercase text-white/40 leading-none italic">{p.l}</div>
+                            <div className="text-6xl font-black text-white italic leading-none">{p.v}</div>
+                            <div className="text-sm font-black uppercase text-[#00f5a0] bg-[#00f5a0]/10 px-6 py-2 rounded-lg inline-block mt-2 self-start tracking-widest">
                                {p.t}
                             </div>
                          </div>
@@ -237,13 +283,13 @@ export default function Home() {
                  <div className="command-card p-24 bg-[#0b0e14] border-4 border-white/10">
                     <div className="flex flex-col gap-16">
                        <div className="flex items-center gap-10">
-                          <Binary className="w-16 h-16 text-[#00f5a0]" />
-                          <span className="text-4xl font-black uppercase text-white italic leading-none tracking-normal">Predictive Result</span>
+                          <Binary className="w-12 h-12 text-[#00f5a0]" />
+                          <span className="text-3xl font-black uppercase text-white italic leading-none tracking-normal">Ensemble Consensus</span>
                        </div>
-                       <p className="text-4xl text-white/50 leading-relaxed italic font-black tracking-normal">
-                          Molecular features in the <span className="text-white underline decoration-[#00f5a0]/80 underline-offset-[16px]">{result.toxicity?.toxicity_class}</span> cluster 
-                          indicate a critical risk profile. 
-                          Confidence: <span className="text-[#00f5a0] text-8xl font-black italic block mt-10 tracking-normal">{(result.toxicity?.confidence || 0 * 100).toFixed(1)}%</span>
+                       <p className="text-3xl text-white/50 leading-relaxed italic font-black tracking-normal">
+                          BioAegis 13-Expert analysis of the provided SMILES string indicates an overall toxicity index of 
+                          <span className="text-white mx-4 underline decoration-[#00f5a0]/80 underline-offset-8">{result.overall_toxicity_index.toFixed(4)}</span>.
+                          Structural risk clusters identified in the the {Object.entries(result.expert_profiling).sort((a,b) => b[1]-a[1])[0][0]} sector.
                        </p>
                     </div>
                  </div>

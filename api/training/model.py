@@ -44,20 +44,18 @@ class BioAegisXAlpha(nn.Module):
             nn.ReLU()
         )
         
-        # 4. Triple-Fusion Head
+        # 4. Multi-Expert Fusion Head
         self.fusion = nn.Sequential(
             nn.Linear(hidden_channels * 3, 256),
             nn.ReLU(),
-            nn.Dropout(0.3),
-            nn.Linear(256, 128),
-            nn.ReLU(),
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            nn.Linear(64, out_channels)
+            nn.Dropout(0.3)
         )
         
-        # 5. Auxiliary Regression Head (Synced with hidden_channels)
-        self.regression_head = nn.Linear(128, 1)
+        # 13 Independent Experts (Toxicity Class Probabilities)
+        self.tox_heads = nn.Linear(256, out_channels)
+        
+        # 5. Global Toxicity Regression (Overall Severity 0-1)
+        self.regression_head = nn.Linear(256, 1)
 
     def forward(self, data):
         # A. Graph Embedding Path
@@ -73,8 +71,12 @@ class BioAegisXAlpha(nn.Module):
         combined = torch.cat([graph_embed, fp_embed, desc_embed], dim=1)
         
         # E. Logic Processing
-        shared = self.fusion[:5](combined) # Outputs hidden_channels (128)
-        logits = self.fusion[5:](shared)   # Processes 128 -> 64 -> out_channels
+        shared = self.fusion(combined) 
+        
+        # 13 Expert Logits
+        logits = self.tox_heads(shared)
+        
+        # Global Severity Scalar
         percentage = self.regression_head(shared)
         
         return logits, percentage.squeeze()
