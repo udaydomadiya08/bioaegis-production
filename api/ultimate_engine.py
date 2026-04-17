@@ -78,6 +78,12 @@ class UltimateEngine:
         if os.path.exists(self.model_path):
             state_dict = torch.load(self.model_path, map_location=self.device, weights_only=False)
             try:
+                self.model.load_state_dict(state_dict, strict=False)
+                print(f"✅ Ensemble Model Synchronized (14-Channel Core).")
+            except Exception as e:
+                print(f"⚠️ Weight Sync Warning: {e}. Skeleton active.")
+        else:
+            print("⚠️ Warning: Production weights not found. Ensemble Skeleton active.")
         
         # Load Mathematical Threshold Matrix
         self.threshold_matrix = {}
