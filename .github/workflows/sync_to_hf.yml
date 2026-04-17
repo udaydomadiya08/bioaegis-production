@@ -14,4 +14,4 @@ jobs:
         run: pip install huggingface_hub
       - name: Sync to Hugging Face Hub
         run: |
-          python3 -c "from huggingface_hub import HfApi; api = HfApi(token='${{ secrets.HF_TOKEN }}'); api.upload_folder(folder_path='.', repo_id='UDAYDOMADIYA/bioaegis-api', repo_type='space', ignore_patterns=['**/node_modules/**', '**/venv/**', '.git/**', 'models/**', 'api/package.zip', '*.pth', '*.pkl', '__pycache__', '.next/**', '.github/**'])"
+          python3 -c "from huggingface_hub import HfApi; api = HfApi(token='${{ secrets.HF_TOKEN }}'); api.upload_folder(folder_path='.', repo_id='UDAYDOMADIYA/bioaegis-api', repo_type='space', ignore_patterns=['**/node_modules/**', '**/venv/**', '.git/**', 'api/package.zip', '*.pth', '*.pkl', '__pycache__', '.next/**', '.github/**', 'data/**'])"
