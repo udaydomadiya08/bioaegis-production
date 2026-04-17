@@ -1,0 +1,32 @@
+# Data and Shards
+data/
+*.csv
+*.pt.gz
+*.pth
+*.pkl
+
+# Models directory (Upload manually to Hugging Face)
+models/
+!api/package.zip
+
+# Logs and PIDs
+*_log.txt
+*_pid.txt
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Notebooks and Large Assets
+*.ipynb
+*.pdf
+.DS_Store
+
+# Scratch and Temporary
+scratch/
+test_api.py
+inspect_models.py
+eda_visualizations.py
+.github/

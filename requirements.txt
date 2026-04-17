@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+torch
+torch-geometric
+rdkit
+pandas
+numpy
+pydantic
+python-multipart
+scikit-learn
+tqdm
