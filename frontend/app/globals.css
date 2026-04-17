@@ -15,98 +15,95 @@
 
 body {
   background: var(--body-bg);
-  color: #c9d1d9;
+  color: #ffffff; /* Brighter white for total readability */
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
-  font-size: 20px; /* Even bigger base size */
+  font-size: 24px; /* HYPER SCALE BASE */
   line-height: 1.6;
+  font-weight: 500; /* Heavier default weight */
 }
 
 h1, h2, h3, .font-bold {
   font-family: 'Archivo', sans-serif;
   letter-spacing: -0.02em;
+  font-weight: 900 !important; /* Force Maximum Weight */
 }
 
 @layer components {
   /* Vantix Style Command Cards - Rebuilt for BREATHE */
   .command-card {
     background: rgba(22, 27, 34, 0.4);
-    backdrop-filter: blur(25px);
-    border: 2px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1.5rem; /* Reduced radius to prevent text cutting */
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(30px);
+    border: 3px solid rgba(255, 255, 255, 0.1); /* Thicker borders for visibility */
+    border-radius: 1.5rem;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    padding: 3rem; /* Massive internal breathing room */
+    padding: 4rem; /* Even more breathing room */
   }
 
-  .command-card:hover {
-    border-color: rgba(0, 245, 160, 0.4);
-    background: rgba(22, 27, 34, 0.6);
-  }
-
-  /* Massive Action Button */
+  /* Massive Action Button - Hyper Scale */
   .btn-vantix {
     background: var(--emerald-pure);
     color: #0b0e14 !important;
-    padding: 2rem 4rem; /* Even bigger */
-    border-radius: 1rem;
+    padding: 2.5rem 5rem; 
+    border-radius: 1.25rem;
     font-weight: 900;
-    font-size: 1.5rem;
+    font-size: 2rem; /* Huge Button Text */
     text-transform: uppercase;
     font-style: italic;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     transition: all 0.3s ease;
-    box-shadow: 0 0 50px rgba(0, 245, 160, 0.5);
+    box-shadow: 0 0 60px rgba(0, 245, 160, 0.6);
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   /* Fixed Input Field - Pure White Vision */
   .command-input {
     background: transparent;
     color: white !important;
-    font-size: 2rem !important; /* Huge input text */
-    font-weight: 800 !important;
+    font-size: 2.5rem !important; /* HYPER SCALE INPUT */
+    font-weight: 900 !important;
     font-family: 'Archivo', sans-serif;
     outline: none;
     border: none;
     width: 100%;
     resize: none;
-    line-height: 1.4;
+    line-height: 1.3;
   }
   
   .command-input::placeholder {
     color: rgba(255, 255, 255, 0.1);
   }
 
-  /* Massive Typography */
+  /* Massive Typography - VANTIX SCALE */
   .text-industrial {
-    font-size: 6rem; /* Absolute dominance */
+    font-size: 8rem; /* HYPER DOMINANCE */
     font-weight: 900;
     font-style: italic;
     text-transform: uppercase;
-    letter-spacing: -0.04em;
-    line-height: 0.9;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
     color: white;
   }
 
   .text-sub-industrial {
-     font-size: 1.5rem;
-     font-weight: 700;
+     font-size: 2rem;
+     font-weight: 800;
      color: var(--text-dim);
      text-transform: uppercase;
-     letter-spacing: 0.4em;
+     letter-spacing: 0.5em;
   }
 }
 
 /* Central Radial Glow */
 .radial-center-glow {
-  background: radial-gradient(circle at center, rgba(0, 245, 160, 0.1) 0%, transparent 85%);
+  background: radial-gradient(circle at center, rgba(0, 245, 160, 0.12) 0%, transparent 85%);
 }
 
 .scroll-hide::-webkit-scrollbar {
