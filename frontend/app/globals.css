@@ -18,7 +18,8 @@ body {
   color: #c9d1d9;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
-  font-size: 18px; /* Increased base size */
+  font-size: 20px; /* Even bigger base size */
+  line-height: 1.6;
 }
 
 h1, h2, h3, .font-bold {
@@ -27,100 +28,85 @@ h1, h2, h3, .font-bold {
 }
 
 @layer components {
-  /* Vantix Style Command Cards - Rebuilt with Strict CSS */
+  /* Vantix Style Command Cards - Rebuilt for BREATHE */
   .command-card {
     background: rgba(22, 27, 34, 0.4);
-    backdrop-filter: blur(20px);
-    border: 2px solid rgba(255, 255, 255, 0.05); /* Thicker borders */
-    border-radius: 2rem;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(25px);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.5rem; /* Reduced radius to prevent text cutting */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    overflow: hidden;
+    padding: 3rem; /* Massive internal breathing room */
   }
 
   .command-card:hover {
-    border-color: rgba(0, 245, 160, 0.3);
+    border-color: rgba(0, 245, 160, 0.4);
     background: rgba(22, 27, 34, 0.6);
-    transform: translateY(-4px);
   }
 
   /* Massive Action Button */
   .btn-vantix {
     background: var(--emerald-pure);
     color: #0b0e14 !important;
-    padding: 1.5rem 3rem;
-    border-radius: 1.25rem;
+    padding: 2rem 4rem; /* Even bigger */
+    border-radius: 1rem;
     font-weight: 900;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     text-transform: uppercase;
     font-style: italic;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     transition: all 0.3s ease;
-    box-shadow: 0 0 40px rgba(0, 245, 160, 0.4);
+    box-shadow: 0 0 50px rgba(0, 245, 160, 0.5);
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 1.5rem;
   }
 
-  .btn-vantix:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 60px rgba(0, 245, 160, 0.6);
-  }
-
-  /* The FIXED Input Field */
+  /* Fixed Input Field - Pure White Vision */
   .command-input {
     background: transparent;
     color: white !important;
-    font-size: 1.75rem !important;
-    font-weight: 700 !important;
+    font-size: 2rem !important; /* Huge input text */
+    font-weight: 800 !important;
     font-family: 'Archivo', sans-serif;
     outline: none;
     border: none;
     width: 100%;
     resize: none;
+    line-height: 1.4;
   }
   
   .command-input::placeholder {
-    color: rgba(255, 255, 255, 0.15);
-    font-style: italic;
+    color: rgba(255, 255, 255, 0.1);
   }
 
   /* Massive Typography */
   .text-industrial {
-    font-size: 5rem; /* Massive Scale */
+    font-size: 6rem; /* Absolute dominance */
     font-weight: 900;
     font-style: italic;
     text-transform: uppercase;
-    letter-spacing: -0.06em;
-    line-height: 0.8;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
     color: white;
   }
 
   .text-sub-industrial {
-     font-size: 1.25rem;
-     font-weight: 600;
+     font-size: 1.5rem;
+     font-weight: 700;
      color: var(--text-dim);
      text-transform: uppercase;
-     letter-spacing: 0.3em;
+     letter-spacing: 0.4em;
   }
 }
 
-/* Central Radial Glow - Intense */
+/* Central Radial Glow */
 .radial-center-glow {
-  background: radial-gradient(circle at center, rgba(0, 245, 160, 0.08) 0%, transparent 80%);
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 245, 160, 0.2);
-  border-radius: 10px;
+  background: radial-gradient(circle at center, rgba(0, 245, 160, 0.1) 0%, transparent 85%);
 }
 
 .scroll-hide::-webkit-scrollbar {
