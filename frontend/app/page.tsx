@@ -17,7 +17,8 @@ import {
   Share2,
   ChevronRight,
   User,
-  LogOut
+  LogOut,
+  Info
 } from "lucide-react";
 import MoleculeViewer from "@/components/MoleculeViewer";
 import Molecule3D from "@/components/Molecule3D";
