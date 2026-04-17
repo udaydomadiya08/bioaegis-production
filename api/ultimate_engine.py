@@ -14,20 +14,29 @@ class UltimateEngine:
     Ultimate Inference Engine for BioAegis X-Alpha.
     Handles graph transformation, physicochemical fusion, and dual-mode prediction.
     """
-    def __init__(self, models_dir="models"):
+    def __init__(self, models_dir=None):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.repo_id = "UDAYDOMADIYA/bioaegis-weights"
         
-        # Cloud-Native Umbilical: Pull weights from Hub if missing
-        print(f"🛰️ BioAegis System: Synchronizing weights from {self.repo_id}...")
-        try:
-            self.model_path = hf_hub_download(repo_id=self.repo_id, filename="ultimate_bioaegis_ensemble.pth")
-            self.label_map_path = hf_hub_download(repo_id=self.repo_id, filename="label_map.pkl")
-            print("✅ Cloud Weights Synchronized. System Operational.")
-        except Exception as e:
-            print(f"⚠️ Cloud Sync Failed: {e}. Attempting local fallback...")
-            self.model_path = os.path.join(models_dir, "ultimate_bioaegis_ensemble.pth")
-            self.label_map_path = os.path.join(models_dir, "label_map.pkl")
+        # 1. Absolute Path Normalization: Prioritize Bundled Repo Weights
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if not models_dir:
+            models_dir = os.path.join(base_dir, "models")
+        
+        self.model_path = os.path.join(models_dir, "ultimate_bioaegis_ensemble.pth")
+        self.label_map_path = os.path.join(models_dir, "label_map.pkl")
+
+        # 2. Local Detection & Synchronization Umbilical
+        if os.path.exists(self.model_path):
+            print(f"✅ Neural Core Detected: {self.model_path}")
+        else:
+            print(f"⚠️ Warning: Bundled weights not found at {self.model_path}. Attempting cloud sync...")
+            self.repo_id = "UDAYDOMADIYA/bioaegis-weights"
+            try:
+                self.model_path = hf_hub_download(repo_id=self.repo_id, filename="ultimate_bioaegis_ensemble.pth")
+                self.label_map_path = hf_hub_download(repo_id=self.repo_id, filename="label_map.pkl")
+                print("✅ Cloud Weights Synchronized.")
+            except Exception as e:
+                print(f"⚠️ Cloud Sync Failed: {e}. Ensemble Skeleton active.")
         
         self.label_map = None
         if os.path.exists(self.label_map_path):
