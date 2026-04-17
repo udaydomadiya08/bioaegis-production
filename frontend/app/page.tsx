@@ -137,7 +137,10 @@ export default function Home() {
       {/* Main Command Deck */}
       <main className="flex-1 relative flex flex-col radial-center-glow overflow-y-auto scroll-hide">
         {/* Top Operational bar */}
-        <header className="px-10 py-6 flex items-center justify-between pointer-events-none sticky top-0 bg-[#0d1117]/80 backdrop-blur-md z-40 border-b border-white/5">
+        <header 
+          className="px-10 py-6 flex items-center justify-between pointer-events-none sticky top-0 bg-[#0d1117]/80 z-40 border-b border-white/5"
+          style={{ backdropFilter: 'blur(12px)' }}
+        >
           <div className="flex items-center gap-4">
              <div className="text-[10px] bg-white/5 px-2 py-0.5 rounded border border-white/10 font-black uppercase tracking-widest text-[#00f5a0]">Vantix Node v1.1.0</div>
              <div className="h-4 w-px bg-white/10" />
@@ -197,8 +200,11 @@ export default function Home() {
                       <Radio className="w-5 h-5 animate-pulse" />
                       <h3 className="text-sm font-black uppercase tracking-widest italic leading-none">Active Production Stream</h3>
                    </div>
-                   <div className="command-card relative h-[600px] overflow-hidden group">
-                      <div className="absolute top-6 left-6 z-10 flex items-center gap-3 bg-black/40 backdrop-blur-md px-4 py-2 rounded-xl border border-white/5">
+                    <div className="command-card relative h-[600px] overflow-hidden group">
+                      <div 
+                        className="absolute top-6 left-6 z-10 flex items-center gap-3 bg-black/40 px-4 py-2 rounded-xl border border-white/5"
+                        style={{ backdropFilter: 'blur(12px)' }}
+                      >
                          <div className="w-2 h-2 bg-[#00f5a0] rounded-full animate-ping" />
                          <span className="text-[10px] font-black uppercase text-white tracking-widest italic">Neural Visualizer Active</span>
                       </div>

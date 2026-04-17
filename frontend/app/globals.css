@@ -28,7 +28,8 @@ h1, h2, h3, .font-bold {
 @layer components {
   /* Vantix Style Command Cards */
   .command-card {
-    @apply bg-[#161b22]/40 backdrop-blur-md border border-white/5 rounded-2xl shadow-xl transition-all duration-300;
+    @apply bg-[#161b22]/40 border border-white/5 rounded-2xl shadow-xl transition-all duration-300;
+    backdrop-filter: blur(12px);
   }
 
   .command-card:hover {
