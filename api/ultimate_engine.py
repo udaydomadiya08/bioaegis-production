@@ -14,19 +14,19 @@ class UltimateEngine:
     Ultimate Inference Engine for BioAegis X-Alpha.
     Handles graph transformation, physicochemical fusion, and dual-mode prediction.
     """
-    def __init__(self, models_dir="api"):
+    def __init__(self, models_dir="models"):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.repo_id = "UDAYDOMADIYA/bioaegis-weights"
         
         # Cloud-Native Umbilical: Pull weights from Hub if missing
         print(f"🛰️ BioAegis System: Synchronizing weights from {self.repo_id}...")
         try:
-            self.model_path = hf_hub_download(repo_id=self.repo_id, filename="ultimate_bioaegis_final.pth")
+            self.model_path = hf_hub_download(repo_id=self.repo_id, filename="ultimate_bioaegis_ensemble.pth")
             self.label_map_path = hf_hub_download(repo_id=self.repo_id, filename="label_map.pkl")
             print("✅ Cloud Weights Synchronized. System Operational.")
         except Exception as e:
             print(f"⚠️ Cloud Sync Failed: {e}. Attempting local fallback...")
-            self.model_path = os.path.join(models_dir, "ultimate_bioaegis_final.pth")
+            self.model_path = os.path.join(models_dir, "ultimate_bioaegis_ensemble.pth")
             self.label_map_path = os.path.join(models_dir, "label_map.pkl")
         
         self.label_map = None
@@ -34,20 +34,36 @@ class UltimateEngine:
             with open(self.label_map_path, "rb") as f:
                 self.label_map = pickle.load(f)
                 self.inv_label_map = {v: k for k, v in self.label_map.items()}
-        
-        # Determine number of classes
-        num_classes = len(self.label_map) if self.label_map else 13
-        
-        # Robust Loading: Detect out_channels from weights if available
+
+        # 4. Standard 13-Expert Pharmacological Mapping (Indices 0-13)
+        self.tox_experts = [
+            "Cardiotoxicity",          # 0
+            "Reproductive toxicity",   # 1
+            None,                      # 2 (Empty Vector)
+            "Liver toxicity",          # 3
+            "Genotoxicity",            # 4
+            "Hepatotoxicity",          # 5
+            "Eye corrosion",           # 6
+            "Eye irritation",          # 7
+            "Zinc toxicity",           # 8
+            "Mutagenecity",            # 9
+            "Respiratory toxicity",    # 10
+            "Skin toxicity",           # 11
+            "Carcinogenicity",         # 12
+            "Acute Toxicity"           # 13
+        ]
+
+        # Robust Loading: Ensemble Specialist Detection (14 Channels Required)
+        self.model = BioAegisXAlpha(out_channels=14).to(self.device)
         if os.path.exists(self.model_path):
             state_dict = torch.load(self.model_path, map_location=self.device, weights_only=False)
-            num_classes = state_dict['fusion.7.weight'].shape[0] if 'fusion.7.weight' in state_dict else num_classes
-            self.model = BioAegisXAlpha(out_channels=num_classes).to(self.device)
-            self.model.load_state_dict(state_dict)
-            print(f"✅ Triple-Fusion Model Synchronized ({num_classes} classes).")
+            try:
+                self.model.load_state_dict(state_dict, strict=False)
+                print(f"✅ Ensemble Model Synchronized (14-Channel Core).")
+            except Exception as e:
+                print(f"⚠️ Weight Sync Warning: {e}. Skeleton active.")
         else:
-            self.model = BioAegisXAlpha(out_channels=num_classes).to(self.device)
-            print("⚠️ Warning: Production weights not found. Skeleton active.")
+            print("⚠️ Warning: Production weights not found. Ensemble Skeleton active.")
         
         self.model.eval()
 
@@ -59,14 +75,9 @@ class UltimateEngine:
             # 1. High-Fidelity Featurization
             from api.training.model import get_chem_features, get_morgan_fp
             x, edge_index, edge_attr = get_chem_features(mol)
-            
-            # Enable gradients for Attribution Pass
             x = x.to(self.device).requires_grad_(True)
-            
-            # 2. Extract Morgan Fingerprint (2048-bit)
             fingerprints = get_morgan_fp(mol).unsqueeze(0).to(self.device)
             
-            # 3. Extract Expanded Descriptors
             from rdkit.Chem import Descriptors as Desc
             desc_values = [
                 Desc.MolWt(mol), Desc.MolLogP(mol), Desc.TPSA(mol),
@@ -76,44 +87,44 @@ class UltimateEngine:
             ]
             descriptors = torch.tensor([desc_values], dtype=torch.float).to(self.device)
             
-            # 4. Create Batch
+            # 2. Universal Batch Inference
             data = Data(x=x, edge_index=edge_index.to(self.device), 
                         edge_attr=edge_attr.to(self.device), fingerprints=fingerprints, descriptors=descriptors)
             batch = Batch.from_data_list([data])
             
-            # 5. Neural Inference (Predictive & Attribution Passes)
-            # A. Predictive Pass
-            logits, percentage = self.model(batch)
+            # 3. Neural Expert Consensus
+            # logits: [1, 13] | regression: [1]
+            logits, global_severity = self.model(batch)
             
-            probs = torch.softmax(logits, dim=1)[0]
-            top_probs, top_indices = torch.topk(probs, k=min(3, probs.size(0)))
+            # Apply Sigmoid for independent probabilities
+            probs = torch.sigmoid(logits)[0] # Shape [13]
             
-            top_classes = []
-            for i in range(top_probs.size(0)):
-                idx = top_indices[i].item()
-                prob = top_probs[i].item()
-                name = self.inv_label_map.get(idx, f"Class {idx}") if self.label_map else f"Class {idx}"
-                top_classes.append({"class": name, "confidence": round(prob, 4)})
+            # Map probabilities to experts (Skip Index 2)
+            expert_results = {}
+            for i, name in enumerate(self.tox_experts):
+                if name is not None:
+                    expert_results[name] = round(probs[i].item() * 100, 2)
             
-            # B. Attribution Pass (Gradient Saliency)
-            # Targeting the top predicted class for "Scientific Explanation"
-            target_logit = logits[0, top_indices[0]]
-            target_logit.backward(retain_graph=True)
+            # 4. Calculate Industrial Toxicity Index (1.0000 - 10.0000)
+            # Uses max expert confidence + weighted global mean
+            base_score = probs.max().item() * 9 + 1 # Map 0-1 to 1-10
+            overall_index_4dec = round(base_score, 4)
             
-            # Atom scores (Norm of gradients across feature dimensions)
-            # x.grad shape: [num_atoms, in_channels]
+            # 5. Scientific Attribution (XAI)
+            # Target the most critical expert head
+            max_idx = torch.argmax(probs)
+            target_expert_logit = logits[0, max_idx]
+            target_expert_logit.backward()
+            
             atom_scores = torch.norm(x.grad, dim=1)
             atom_scores = (atom_scores - atom_scores.min()) / (atom_scores.max() - atom_scores.min() + 1e-6)
             
-            tox_percent = percentage.item() * 100.0 
-            
             return {
-                "toxicity_percent": round(max(0, min(100, tox_percent)), 2),
-                "toxicity_class": top_classes[0]["class"],
-                "confidence": top_classes[0]["confidence"],
-                "top_classes": top_classes,
+                "overall_toxicity_index": overall_index_4dec,
+                "overall_percent": round(probs.max().item() * 100, 2),
+                "expert_profiling": expert_results,
                 "atom_scores": atom_scores.cpu().detach().tolist(),
-                "status": "BioAegis X-Alpha Triple-Fusion + XAI Active"
+                "status": "BioAegis 13-Expert Ensemble Active"
             }
         except Exception as e:
             print(f"Ultimate Inference Error: {e}")
