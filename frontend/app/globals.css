@@ -28,30 +28,76 @@ h1, h2, h3, .font-bold {
 @layer components {
   /* Vantix Style Command Cards */
   .command-card {
-    @apply bg-[#161b22]/40 border border-white/5 rounded-2xl shadow-xl transition-all duration-300;
+    background: rgba(22, 27, 34, 0.4);
     backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
   }
 
   .command-card:hover {
-    @apply border-emerald-500/20 bg-[#161b22]/60;
+    border-color: rgba(0, 245, 160, 0.2);
+    background: rgba(22, 27, 34, 0.6);
   }
 
   /* Industrial Glow Buttons */
   .btn-vantix {
-    @apply bg-emerald-pure text-[#0b0e14] px-8 py-3 rounded-xl font-extrabold uppercase italic tracking-wider transition-all shadow-[0_0_30px_rgba(0,245,160,0.3)] hover:scale-105 active:scale-95;
+    background: var(--emerald-pure);
+    color: #0b0e14;
+    padding: 0.75rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 30px rgba(0, 245, 160, 0.3);
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-vantix:hover {
+    transform: scale(1.05);
+  }
+
+  .btn-vantix:active {
+    transform: scale(0.95);
   }
 
   .nav-item {
-    @apply flex items-center gap-4 px-6 py-4 text-sm font-bold text-text-dim transition-all hover:text-white hover:bg-white/5 cursor-pointer border-l-4 border-transparent;
+    display: flex;
+    items-center: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+  }
+
+  .nav-item:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .nav-item-active {
-    @apply text-white bg-white/5 border-emerald-pure;
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+    border-left-color: var(--emerald-pure);
   }
 
   /* Typography Scales */
   .text-industrial {
-    @apply text-5xl md:text-7xl font-extrabold italic uppercase tracking-tighter leading-[0.85];
+    font-size: 3.5rem;
+    font-weight: 800;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+    color: white;
   }
 }
 
