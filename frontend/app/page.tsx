@@ -175,25 +175,25 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="grid grid-cols-1 lg:grid-cols-12 gap-16 pt-12"
             >
-              {/* 3D Visualizer Terminal */}
+              {/* 3D Visualizer Terminal - DEAD SPACE REMOVAL */}
               <div className="lg:col-span-12 xl:col-span-8 space-y-12">
                  <div className="flex items-center justify-between px-4">
                     <div className="flex items-center gap-4 text-[#00f5a0]">
                        <Box className="w-8 h-8 animate-spin-slow" />
-                       <h3 className="text-2xl font-black uppercase tracking-[0.2em] italic">GNN Structural Attribution Heatmap</h3>
+                       <h3 className="text-2xl font-black uppercase tracking-[0.2em] italic">GNN Structural Attribution</h3>
                     </div>
                     <div className="flex items-center gap-4 text-[10px] font-black uppercase text-[#8b949e] tracking-widest bg-white/5 px-6 py-2 rounded-full border border-white/10">
                        <span>Sentinel Vision Active</span>
                        <div className="w-2.5 h-2.5 bg-[#00f5a0] rounded-full animate-ping" />
                     </div>
                  </div>
-                 <div className="command-card relative h-[750px] overflow-visible !p-0 border-2 border-[#00f5a0]/10">
+                 <div className="command-card relative h-[550px] overflow-hidden !p-0 border-2 border-[#00f5a0]/10">
                     <Molecule3D pdb={result.pdb || ""} atomScores={result.toxicity?.atom_scores} />
-                    <div className="absolute bottom-10 left-10 z-20 bg-[#0d1117]/90 backdrop-blur-xl px-10 py-6 rounded-2xl border border-[#00f5a0]/20 flex items-center gap-6 shadow-2xl">
-                       <Target className="w-8 h-8 text-[#00f5a0]" />
+                    <div className="absolute bottom-6 left-6 z-20 bg-[#0d1117]/90 backdrop-blur-xl px-8 py-4 rounded-xl border border-[#00f5a0]/20 flex items-center gap-4 shadow-2xl">
+                       <Target className="w-6 h-6 text-[#00f5a0]" />
                        <div className="flex flex-col">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-[#8b949e]">Processing Layer</span>
-                          <span className="text-xl font-black uppercase tracking-widest text-white italic">Thermal Attribution</span>
+                          <span className="text-[9px] font-black uppercase tracking-widest text-[#8b949e]">Processing Mode</span>
+                          <span className="text-sm font-black uppercase tracking-widest text-white italic">Holographic Heatmap Sync</span>
                        </div>
                     </div>
                  </div>
@@ -211,7 +211,7 @@ export default function Home() {
                     </div>
                  </section>
 
-                 {/* Property Grid - Icon Driven Recalibration */}
+                 {/* Property Grid */}
                  <div className="grid grid-cols-2 gap-8">
                     {[
                       { l: "LogP", v: result.properties?.logp.toFixed(2), i: Activity, c: "#00f5a0" },
