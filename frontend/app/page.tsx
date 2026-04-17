@@ -143,7 +143,7 @@ export default function Home() {
                onChange={(e) => setSmiles(e.target.value)}
                placeholder="Input Molecular String (SMILES)..."
                className="command-input flex-1 p-16 min-h-[220px] focus:ring-0 text-white font-black"
-               style={{ fontSize: '3rem', lineHeight: '1', tracking: 'normal' }}
+               style={{ fontSize: '3rem', lineHeight: '1', letterSpacing: 'normal' }}
              />
              <div className="p-8 w-full xl:w-auto">
                <button 
